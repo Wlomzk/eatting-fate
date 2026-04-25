@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="icon" href="image/GUIXIN.webp" type="image/webp">
 </head>
-<body class="bg-stone-50">
+<body class="antialiased">
 
     <div class="status-bar bg-[#3d3832] text-[#d9d4cc] overflow-hidden whitespace-nowrap py-1">
         <div class="status-content inline-block animate-marquee text-[10px] tracking-widest">
@@ -35,15 +35,15 @@
         </div>
     </nav>
 
-    <header id="page-home" class="hero-banner py-24 md:py-40 px-6 md:px-12 text-center">
+    <header id="page-home" class="hero-banner py-12 md:py-20 px-6 md:px-12 text-center">
         <h2 class="text-2xl md:text-4xl font-light mb-6 md:mb-8 tracking-widest text-stone-800" style="font-family: 'Noto Serif TC', serif;">萬物歸心，終有一宿</h2>
-        <p class="text-[10px] md:text-xs opacity-50 tracking-[0.3em] mb-12 md:mb-16 uppercase px-4 text-stone-600">—— 跨越千年的專業遞送，為您尋回遺失的託付 ——</p>
-        
-        <div class="max-w-2xl mx-auto">
-            <div class="flex flex-col md:flex-row p-1.5 search-container rounded-lg bg-stone-100 shadow-inner">
-                <input type="text" id="trackInput" placeholder="輸入貨物檢索碼" class="flex-grow p-4 text-base rounded focus:outline-none placeholder:text-stone-400 bg-transparent">
-                <button onclick="handleTrack()" class="mt-2 md:mt-0 md:ml-2 bg-[#3d3832] text-[#d9d4cc] px-10 py-4 font-semibold tracking-[0.2em] text-sm rounded shadow-md hover:bg-[#2d2825] transition-all">查 詢</button>
-            </div>
+        <p class="text-[10px] md:text-xs tracking-[0.3em] mb-12 md:mb-16 uppercase px-4 text-stone-800 font-normal">
+    —————— 跨越千年的專業遞送，為您尋回遺失的託付 ——————
+</p>
+            <div class="flex flex-col md:flex-row p-1.5 search-container rounded-lg bg-stone-100 shadow-inner max-w-2xl mx-auto">
+    <input type="text" id="trackInput" placeholder="輸入貨物檢索碼" class="flex-grow p-4 text-base rounded focus:outline-none placeholder:text-stone-400 bg-transparent">
+    <button onclick="handleTrack()" class="mt-2 md:mt-0 md:ml-2 bg-[#3d3832] text-[#d9d4cc] px-10 py-4 font-semibold tracking-[0.2em] text-lg rounded shadow-md hover:bg-[#2d2825] transition-all whitespace-nowrap">查 詢</button>
+</div>
             
             <div id="search-result" class="mt-8">
                 <p id="result-content" class="text-sm md:text-base leading-loose tracking-widest text-left text-stone-700"></p>
@@ -77,13 +77,15 @@
         </div>
     </section>
 
-    <footer class="py-12 md:py-20 text-center border-t border-stone-200 bg-stone-50/50">
-        <div class="max-w-3xl mx-auto px-8 md:px-12 mb-8 md:mb-10 text-[10px] opacity-40 leading-loose tracking-[0.1em] text-stone-500">
-            <p class="mb-2">本公司受《因果律法》監管，所有遞送物件之「緣分」均受保護。</p>
-            <p>若檢索過程中出現幻覺或時空錯亂，請立即停止操作。</p>
-        </div>
-        <p class="text-[9px] opacity-30 tracking-[0.2em] text-stone-600">© 2024 歸心物流有限公司 GUIXIN LOGISTICS.</p>
-    </footer>
+    <footer class="py-12 md:py-20 text-center border-t border-stone-300 bg-stone-200/30">
+    <div class="max-w-3xl mx-auto px-8 md:px-12 mb-8 md:mb-10 text-[11px] leading-loose tracking-[0.15em] text-stone-800 font-medium">
+        <p class="mb-2">本公司受《因果律法》監管，所有遞送物件之「緣分」均受保護。</p>
+        <p>若檢索過程中出現幻覺或時空錯亂，請立即停止操作。</p>
+    </div>
+    <p class="text-[10px] tracking-[0.2em] text-stone-900 font-bold">
+        © 2024 歸心物流有限公司 GUIXIN LOGISTICS.
+    </p>
+</footer>
 
     <script src="JS/game.js"></script>
 </body>
