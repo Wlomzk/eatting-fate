@@ -34,29 +34,22 @@
         <a href="login.html" class="text-[12px] tracking-[0.2em] bg-[#3d3832] text-[#d9d4cc] px-6 py-1.5 rounded border-b-2 border-[#2a2623] shadow-md hover:bg-[#2d2825] transition-all ml-2">加盟登入</a>
     </div>
 
-    <div class="md:hidden flex items-center">
-        <button id="mobile-menu-button" class="text-stone-800 focus:outline-none">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-            </svg>
-        </button>
-    </div>
-
-    <div id="mobile-menu" class="fixed inset-0 z-[60] hidden flex-col items-center justify-center bg-stone-900/95 backdrop-blur-lg">
-    <button id="close-menu" class="absolute top-8 right-8 text-white/70 hover:text-white">
+    <div id="mobile-menu" class="fixed inset-0 z-[60] hidden flex-col items-center justify-center bg-[#1a1816]/90 backdrop-blur-2xl">
+    
+    <button id="close-menu" class="absolute top-8 right-8 text-white/50 hover:text-white transition-all">
         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
     </button>
 
-    <div class="flex flex-col items-center space-y-10 tracking-[0.4em] text-white">
-        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('home')" class="text-2xl font-light hover:text-stone-400 transition-colors">回首頁</a>
-        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('services')" class="text-2xl font-light hover:text-stone-400 transition-colors">服務項目</a>
-        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('locations')" class="text-2xl font-light hover:text-stone-400 transition-colors">配送據點</a>
-        <a href="pages/forget-something.html" class="text-2xl font-light hover:text-stone-400 transition-colors">失物招領處</a>
+    <div class="flex flex-col items-center space-y-12 tracking-[0.5em] text-[#d9d4cc]">
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('home')" class="text-2xl font-medium hover:text-white transition-colors drop-shadow-md">回 首 頁</a>
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('services')" class="text-2xl font-medium hover:text-white transition-colors drop-shadow-md">服務項目</a>
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('locations')" class="text-2xl font-medium hover:text-white transition-colors drop-shadow-md">配送據點</a>
+        <a href="pages/forget-something.html" class="text-2xl font-medium hover:text-white transition-colors drop-shadow-md">失物招領處</a>
         
-        <a href="login.html" class="mt-4 px-12 py-3 bg-[#d9d4cc] text-[#3d3832] rounded text-lg font-bold shadow-2xl">
-            加盟登入
+        <a href="login.html" class="mt-6 px-14 py-4 bg-[#d9d4cc] text-[#3d3832] rounded-sm text-lg font-bold shadow-[0_10px_30px_rgba(0,0,0,0.3)] active:scale-95 transition-all">
+            加 盟 登 入
         </a>
     </div>
 </div>
