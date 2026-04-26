@@ -120,14 +120,15 @@
             top: 18%; left: 18%;
             
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             
             /* 霧化效果：移除邊框，使用柔和的外陰影 */
-            border: none;
-            box-shadow: 0 0 50px 20px rgba(255, 255, 255, 0.05);
-            
-            z-index: 3010;
+            -webkit-mask-image: radial-gradient(circle, black 50%, transparent 95%);
+    mask-image: radial-gradient(circle, black 50%, transparent 95%);
+    
+    border: none;
+    z-index: 3010;
         }
 
         /* 下方導航容器 (包含三角形和小圈圈) */
@@ -154,12 +155,12 @@
         .nav-btn:active { transform: scale(0.9); }
 
         .btn-left {
-            border-right: 25px solid rgba(148, 76, 13, 0.9);
+            border-right: 5px solid rgba(148, 76, 13, 0.9);
             margin-right: 10px; /* 增加與圈圈的間隔，達到內縮視覺 */
         }
 
         .btn-right {
-            border-left: 25px solid rgba(148, 76, 13, 0.9);
+            border-left: 5px solid rgba(148, 76, 13, 0.9);
             margin-left: 10px;
         }
 
@@ -183,7 +184,7 @@
         /* 頁面文字 (改到圈圈下面) */
         .page-content {
             position: absolute;
-            bottom: -40px; /* 位於圈圈容器下方 */
+            bottom: 3%; /* 位於圈圈容器下方 */
             left: 0; width: 100%;
             color: white;
             text-align: center;
