@@ -118,33 +118,44 @@
             width: 64%; height: 70%; 
             top: 18%; left: 18%;
             
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            
-            /* 💡 使用陰影疊加實現完全霧化，不影響內部元件 */
-            border: none;
-            box-shadow: 
-                0 0 60px 30px rgba(255, 255, 255, 0.05),
-                inset 0 0 50px 20px rgba(0, 0, 0, 0.2);
-            
-            z-index: 3010;
-            overflow: visible;
-        }
+            background: radial-gradient(
+        circle, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0.1) 60%, 
+        transparent 100%
+    );
+
+    /* 💡 重點 2：加強模糊，讓漸層背景跟底圖融為一體 */
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    
+    border: none; /* 絕對不能有邊框線 */
+    z-index: 3010;
+}
 
         /* 下方導航容器 */
         .pagination-container {
-            position: absolute;
-            bottom: 0; left: 0; width: 100%; height: 120px; /* 固定高度便於文字置中 */
-            display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-            pointer-events: none;
-        }
+    position: absolute;
+    bottom: 2%; /* 讓文字底部接近毛玻璃邊緣 */
+    left: 0; 
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 5%;
+    display: flex; 
+    flex-direction: column; /* 讓內容垂直排列：按鈕列在頂，文字在底 */
+    align-items: center;
+    gap: 5px; /* 💡 縮短圈圈與文字之間的間距 (原為15px) */
+    pointer-events: none;
+}
 
         /* 控制按鈕與圈圈的橫列 */
         .controls-row {
-            display: flex; justify-content: center; align-items: center;
-            gap: 15px; margin-top: 10px;
-        }
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: auto;
+}
 
         .nav-btn {
             width: 0; height: 0;
