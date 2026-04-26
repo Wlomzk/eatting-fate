@@ -15,16 +15,16 @@
             font-family: "Noto Sans TC", sans-serif;
         }
 
-        /* 1. 把拔最愛的毛玻璃導航欄回歸！ */
+        /* 1. 導航欄 */
         .header-bar {
             position: fixed; top: 0; left: 0; width: 100%;
             padding: 1rem 5%;
-            background: rgba(255, 255, 255, 0.05); /* 輕微白色基調 */
-            backdrop-filter: blur(15px) brightness(0.6); /* 強力毛玻璃 */
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px) brightness(0.6);
             -webkit-backdrop-filter: blur(15px) brightness(0.6);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; justify-content: space-between; align-items: center;
-            box-sizing: border-box; z-index: 1000; /* 層級拉高 */
+            box-sizing: border-box; z-index: 1000;
             pointer-events: none; 
         }
 
@@ -44,9 +44,9 @@
 
         .scene-container {
             position: relative;
+            /* 預設桌機比例 (16:9) */
             width: 100vw; height: 56.25vw;
             max-height: 100vh; max-width: 177.78vh;
-            /* 💡 核心修正：取消溢出隱藏，讓發光可以「溢出」格子而不被切斷 */
             overflow: visible !important;
         }
 
@@ -54,22 +54,22 @@
             width: 100%; height: 100%;
             object-fit: cover;
             display: block;
+            /* 桌機預設圖 */
+            content: url("../image/forget-something.webp");
         }
 
-        /* 2. 互動點優化：解決切邊的終極武器 */
+        /* 2. 互動熱點基礎樣式 */
         .hotspot {
             position: absolute;
             cursor: pointer;
             border-radius: 50%;
-            opacity: 0;
-            /* 💡 修正：確保 radial-gradient 的邊緣在盒子內完美消失 */
             background: radial-gradient(circle at center, rgba(0, 255, 120, 0.6) 0%, transparent 80%);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             filter: blur(10px);
             transform: translate(-50%, -50%);
             z-index: 500;
-            opacity: 0.1; /* 平常就有極淡的影子 */
-    animation: pulse 3s infinite ease-in-out;
+            opacity: 0.1;
+            animation: pulse 3s infinite ease-in-out;
         }
 
         .hotspot:hover {
@@ -79,12 +79,34 @@
             transform: translate(-50%, -50%) scale(1.05);
         }
 
-        /* --- 座標修正：稍微加大 turtle-shell 的寬高容器，防止切邊 --- */
+        /* [💻 桌機版座標 ] */
         #turtle-shell { width: 18%; height: 22%; left: 11.5%; top: 69%; }
         #newspaper    { width: 15%; height: 20%; left: 10%; top: 86%; }
         #crt-monitor  { width: 10%; height: 14%; left: 24%; top: 77.5%; }
         #lcd-monitor  { width: 12%; height: 18%; left: 84.5%; top: 61.5%; }
         #phone-screen { width: 6%;  height: 12%; left: 92.5%; top: 66%; }
+
+        /* [📱 手機版 RWD 修正區] */
+        @media (max-aspect-ratio: 1/1) or (max-width: 768px) {
+            .scene-container {
+                /* 手機直向比例 (約 9:16) */
+                width: 100vw; 
+                height: 177.78vw;
+                max-height: 80vh; /* 避免擋到上下文字 */
+            }
+
+            .scene-img {
+                /* 換成把拔出的直圖 */
+                content: url("../image/forget-something-mobile.webp");
+            }
+
+            /* 手機版熱點座標重對 (稍微放大方便手指點擊) */
+            #turtle-shell { width: 25%; height: 12%; left: 28%; top: 68%; }
+            #newspaper    { width: 22%; height: 10%; left: 25%; top: 85%; }
+            #crt-monitor  { width: 18%; height: 8%;  left: 45%; top: 75%; }
+            #lcd-monitor  { width: 22%; height: 12%; left: 75%; top: 58%; }
+            #phone-screen { width: 15%; height: 10%; left: 85%; top: 62%; }
+        }
 
         .hint-text {
             position: fixed; bottom: 5%; width: 100%;
@@ -95,15 +117,9 @@
         }
 
         @keyframes pulse {
-    0%, 100% { 
-        opacity: 0.05; 
-        transform: translate(-50%, -50%) scale(1); 
-    }
-    50% { 
-        opacity: 0.2; /* 讓它稍微亮一點點，提示玩家 */
-        transform: translate(-50%, -50%) scale(1.1); 
-    }
-}
+            0%, 100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
+        }
 
         @keyframes breathe {
             0%, 100% { opacity: 0.1; } 50% { opacity: 0.4; }
