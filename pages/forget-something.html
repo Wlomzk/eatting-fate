@@ -104,12 +104,43 @@
             opacity: 0; transition: opacity 0.4s ease;
         }
 
+        .overlay.is-newspaper {
+    background-color: #1a120b;
+    background-image: 
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,0.2) 50%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+    background-size: 20px 100%, 100% 4px, 100% 100%;
+}
+
+.is-newspaper .img-portrait {
+    filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8));
+}
+
         .overlay.show { display: flex; opacity: 1; }
 
-        .detail-view { position: relative; display: flex; justify-content: center; align-items: center; }
+        .detail-view {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;  /* 💡 新增：寬度撐滿 */
+    height: 100%; /* 💡 新增：高度撐滿 */
+}
 
-        .img-portrait { height: 90vh; width: auto; object-fit: contain; }
-        .img-square { width: 90vw; height: auto; max-height: 90vh; object-fit: contain; }
+        .img-portrait {
+    width: auto;
+    height: 100vh; /* 💡 讓高度鎖定在螢幕 100% */
+    max-width: 100vw;
+    object-fit: contain; /* 💡 保持比例，絕對不拉伸 */
+}
+
+        .img-square {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 保留完整圖片 */
+    max-height: 95vh;
+}
 
         /* --- 📰 報紙專用 UI (霧化修正版) --- */
         .newspaper-ui {
@@ -334,11 +365,14 @@
             detailImg.className = (asset.type === 'portrait') ? 'img-portrait' : 'img-square';
             
             if (key === 'newspaper') {
+                overlay.classList.add('is-newspaper');
                 newsExtras.style.display = 'block';
+                
                 currentPage = 0;
                 initDots();
                 renderPage();
             } else {
+                overlay.classList.remove('is-newspaper');
                 newsExtras.style.display = 'none';
             }
             
