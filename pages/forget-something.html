@@ -15,7 +15,7 @@
             font-family: "Noto Sans TC", sans-serif;
         }
 
-        /* 1. 導航欄 */
+        /* 導航欄 */
         .header-bar {
             position: fixed; top: 0; left: 0; width: 100%;
             padding: 1rem 5%;
@@ -33,7 +33,6 @@
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-size: 1rem; letter-spacing: 0.3em;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .scene-wrapper {
@@ -44,8 +43,7 @@
 
         .scene-container {
             position: relative;
-            /* 預設桌機比例 (16:9) */
-            width: 100vw; height: 56.25vw;
+            width: 100vw; height: 56.25vw; /* 桌機預設 16:9 */
             max-height: 100vh; max-width: 177.78vh;
             overflow: visible !important;
         }
@@ -54,29 +52,20 @@
             width: 100%; height: 100%;
             object-fit: cover;
             display: block;
-            /* 桌機預設圖 */
-            content: url("/image/forget-something.webp");
         }
 
-        /* 2. 互動熱點基礎樣式 */
+        /* 互動點樣式 */
         .hotspot {
             position: absolute;
             cursor: pointer;
             border-radius: 50%;
             background: radial-gradient(circle at center, rgba(0, 255, 120, 0.6) 0%, transparent 80%);
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s;
             filter: blur(10px);
             transform: translate(-50%, -50%);
             z-index: 500;
             opacity: 0.1;
             animation: pulse 3s infinite ease-in-out;
-        }
-
-        .hotspot:hover {
-            opacity: 1;
-            animation: none;
-            filter: blur(4px) brightness(1.2);
-            transform: translate(-50%, -50%) scale(1.05);
         }
 
         /* [💻 桌機版座標 ] */
@@ -86,21 +75,14 @@
         #lcd-monitor  { width: 12%; height: 18%; left: 84.5%; top: 61.5%; }
         #phone-screen { width: 6%;  height: 12%; left: 92.5%; top: 66%; }
 
-        /* [📱 手機版 RWD 修正區] */
-        @media (max-aspect-ratio: 1/1) or (max-width: 768px) {
+        /* [📱 手機版 RWD 容器修正] */
+        @media (max-aspect-ratio: 1/1) {
             .scene-container {
-                /* 手機直向比例 (約 9:16) */
                 width: 100vw; 
-                height: 177.78vw;
-                max-height: 80vh; /* 避免擋到上下文字 */
+                height: 177.78vw; /* 直向比例 */
+                max-height: 80vh;
             }
-
-            .scene-img {
-                /* 換成把拔出的直圖 */
-                content: url("/image/forget-something-m.webp");
-            }
-
-            /* 手機版熱點座標重對 (稍微放大方便手指點擊) */
+            /* 手機熱點 */
             #turtle-shell { width: 25%; height: 12%; left: 28%; top: 68%; }
             #newspaper    { width: 22%; height: 10%; left: 25%; top: 85%; }
             #crt-monitor  { width: 18%; height: 8%;  left: 45%; top: 75%; }
@@ -108,21 +90,9 @@
             #phone-screen { width: 15%; height: 10%; left: 85%; top: 62%; }
         }
 
-        .hint-text {
-            position: fixed; bottom: 5%; width: 100%;
-            text-align: center; color: rgba(255, 255, 255, 0.2);
-            letter-spacing: 0.5em; font-size: 0.8rem;
-            z-index: 5; pointer-events: none;
-            animation: breathe 4s infinite;
-        }
-
         @keyframes pulse {
             0%, 100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1); }
             50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
-        }
-
-        @keyframes breathe {
-            0%, 100% { opacity: 0.1; } 50% { opacity: 0.4; }
         }
     </style>
 </head>
@@ -135,7 +105,8 @@
 
     <div class="scene-wrapper">
         <div class="scene-container">
-            <img src="/image/forget-something.webp" class="scene-img" alt="Warehouse">
+            <img id="main-scene" src="/image/forget-something.webp" class="scene-img" alt="Warehouse">
+            
             <div class="hotspot" id="turtle-shell" onclick="alert('烏...烏龜的殼??')"></div>
             <div class="hotspot" id="newspaper" onclick="alert('這些報紙似乎來自不同的時空。')"></div>
             <div class="hotspot" id="crt-monitor" onclick="alert('這裡怎麼有台這麼舊的電腦??')"></div>
@@ -144,9 +115,23 @@
         </div>
     </div>
 
-    <div class="hint-text">FORGET SOMETHING?</div>
-
     <script>
+        // 🚀 自動換圖腳本
+        function updateImageSource() {
+            const img = document.getElementById('main-scene');
+            // 如果螢幕高度大於寬度 (直向手機)
+            if (window.innerHeight > window.innerWidth) {
+                img.src = "/image/forget-something-m.webp";
+            } else {
+                img.src = "/image/forget-something.webp";
+            }
+        }
+
+        // 初始化檢查一次
+        updateImageSource();
+        // 螢幕轉動或縮放時再檢查
+        window.addEventListener('resize', updateImageSource);
+
         function triggerGlitch() {
             alert('訊息顯示：妳以為妳逃掉了嗎？');
         }
