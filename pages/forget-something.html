@@ -15,7 +15,6 @@
             font-family: "Noto Sans TC", sans-serif;
         }
 
-        /* 導航欄 */
         .header-bar {
             position: fixed; top: 0; left: 0; width: 100%;
             padding: 1.2rem 5%;
@@ -45,145 +44,84 @@
             max-height: 100vh; max-width: 177.78vh;
         }
 
-        .scene-img {
-            width: 100%; height: 100%;
-            object-fit: contain;
-            display: block;
-        }
+        .scene-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
-        /* 互動點 */
         .hotspot {
-            position: absolute;
-            cursor: pointer;
-            border-radius: 50%;
+            position: absolute; cursor: pointer; border-radius: 50%;
             background: radial-gradient(circle at center, rgba(0, 255, 120, 0.5) 0%, transparent 70%);
-            transition: all 0.3s ease;
-            filter: blur(8px);
-            transform: translate(-50%, -50%);
-            z-index: 500;
-            opacity: 0.2;
+            transition: all 0.3s ease; filter: blur(8px);
+            transform: translate(-50%, -50%); z-index: 500; opacity: 0.2;
             animation: pulse 3s infinite ease-in-out;
         }
 
-        .hotspot:hover, .hotspot.active {
-            opacity: 0.9 !important;
-            filter: blur(15px) brightness(1.5);
-            transform: translate(-50%, -50%) scale(1.3);
-        }
-
-        /* 座標設定 */
         #turtle-shell { width: 10%; height: 15%; left: 11.5%; top: 69%; }
         #newspaper    { width: 12%; height: 15%; left: 10%; top: 86%; }
         #crt-monitor  { width: 8%; height: 10%; left: 24%; top: 77.5%; }
         #lcd-monitor  { width: 10%; height: 15%; left: 84.5%; top: 61.5%; }
         #phone-screen { width: 5%; height: 8%; left: 92.5%; top: 66%; }
 
-        @media (max-aspect-ratio: 1/1) {
-            .scene-container { width: 100vw; height: 177.78vw; }
-            #turtle-shell { width: 20%; height: 10%; left: 13%; top: 74%; }
-            #newspaper    { width: 19%; height: 10%; left: 11%; top: 87%; }
-            #crt-monitor  { width: 17%; height: 9%; left: 35%; top: 82%; }
-            #lcd-monitor  { width: 17%; height: 9%; left: 85%; top: 67%; }
-            #phone-screen { width: 7%; height: 4%; left: 76%; top: 73%; }
-        }
+        @media (max-aspect-ratio: 1/1) { .scene-container { width: 100vw; height: 177.78vw; } }
 
         @keyframes pulse {
             0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(1); }
             50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.15); }
         }
 
-        /* --- ✨ 彈出特寫視窗 --- */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95);
             display: none; justify-content: center; align-items: center;
-            z-index: 3000;
-            opacity: 0; transition: opacity 0.4s ease;
+            z-index: 3000; opacity: 0; transition: opacity 0.4s ease;
         }
 
         .overlay.show { display: flex; opacity: 1; }
-
         .detail-view { position: relative; display: flex; justify-content: center; align-items: center; }
-
         .img-portrait { height: 90vh; width: auto; object-fit: contain; }
-        .img-square { width: 90vw; height: auto; max-height: 90vh; object-fit: contain; }
 
-        /* --- 📰 報紙專用 UI：毛玻璃區域 --- */
+        /* --- 📰 報紙 UI：霧化處理 --- */
         .newspaper-ui {
             position: absolute;
-            display: none; /* 預設隱藏，點擊報紙才顯示 */
-            width: 64%; height: 70%; /* 根據把拔附圖的黃框比例 */
-            top: 18%;   left: 18%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: none;
+            width: 64%; height: 50%;
+            top: 25%; left: 18%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px); /* 增加模糊度 */
+            -webkit-backdrop-filter: blur(15px);
+            /* 💡 移除 border，改用外發光做邊緣霧化 */
+            box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.05); 
             z-index: 3010;
+            display: flex; flex-direction: column;
         }
 
-        /* 分頁內容文字容器 */
-        .page-content {
-            padding: 2rem;
-            color: white;
-            text-align: center;
-            font-size: 1.2rem;
-            height: 100%;
-            box-sizing: border-box;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-
-        /* 下方導航容器（包含三角形和小圈圈） */
         .pagination-container {
-            position: absolute;
-            bottom: 5%; left: 0; width: 100%;
+            width: 100%; padding-top: 20px;
             display: flex; justify-content: center; align-items: center;
-            gap: 15px;
-            pointer-events: none;
+            gap: 15px; position: relative;
         }
 
-        /* 紅色三角形按鈕 */
         .nav-btn {
-            width: 0; height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            cursor: pointer;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
-            transition: transform 0.2s;
-            pointer-events: auto;
+            width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent;
+            cursor: pointer; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+            transition: transform 0.2s; pointer-events: auto;
         }
+        .btn-left { border-right: 20px solid rgba(148, 76, 13, 0.9); margin-right: 10px; }
+        .btn-right { border-left: 20px solid rgba(148, 76, 13, 0.9); margin-left: 10px; }
 
-        .nav-btn:active { transform: scale(0.9); }
-
-        .btn-left { border-right: 20px solid rgba(148, 76, 13, 0.9); }
-        .btn-right { border-left: 20px solid rgba(148, 76, 13, 0.9); }
-
-        /* 小圈圈分頁符 */
-        .dot-wrapper { display: flex; gap: 8px; align-items: center; }
-        
+        .dot-wrapper { display: flex; gap: 10px; align-items: center; }
         .dot {
-            width: 10px; height: 10px; /* 稍微放大一點點比較好點 */
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-    cursor: pointer; /* 💡 讓圈圈變成交互動點 */
-    pointer-events: auto; /* 確保它能接收點擊 */
-}
+            width: 10px; height: 10px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2); transition: all 0.3s;
+            cursor: pointer; pointer-events: auto;
+        }
+        .dot.active { background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); }
 
-.dot:hover {
-    background: rgba(255, 255, 255, 0.6);
-    transform: scale(1.2); /* 移上去有輕微縮放感，更有質感 */
-}
-
-        .dot.active {
-            background: rgba(0, 0, 0, 0.8); /* 當前頁深色 */
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        .page-content {
+            padding: 20px; color: white; text-align: center; font-size: 1.1rem;
+            flex: 1; display: flex; align-items: flex-start; justify-content: center;
+            margin-top: 15px;
         }
 
-        .close-btn {
-            position: absolute; top: 20px; right: 20px;
-            color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 3100;
-        }
+        .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 3100; }
     </style>
 </head>
 <body>
@@ -195,7 +133,7 @@
 
     <div class="scene-wrapper">
         <div class="scene-container">
-            <img id="main-scene" src="" class="scene-img" alt="Warehouse">
+            <img id="main-scene" src="" class="scene-img">
             <div class="hotspot" id="turtle-shell" onclick="handleDetailPopup('turtle')"></div>
             <div class="hotspot" id="newspaper" onclick="handleDetailPopup('newspaper')"></div>
             <div class="hotspot" id="crt-monitor" onclick="handleDetailPopup('mirror')"></div> 
@@ -206,21 +144,15 @@
 
     <div class="overlay" id="detail-overlay" onclick="closeDetail()">
         <div class="close-btn" onclick="closeDetail()">&times;</div>
-        
         <div class="detail-view" onclick="event.stopPropagation()">
-            <img id="detail-img" src="" alt="Detail View">
-
+            <img id="detail-img" src="">
             <div id="newspaper-extras" class="newspaper-ui">
-                <div class="page-content" id="page-content">
-                    載入中...
-                </div>
-
                 <div class="pagination-container">
                     <div class="nav-btn btn-left" onclick="changePage(-1)"></div>
-                    <div class="dot-wrapper" id="dot-wrapper">
-                        </div>
+                    <div class="dot-wrapper" id="dot-wrapper"></div>
                     <div class="nav-btn btn-right" onclick="changePage(1)"></div>
                 </div>
+                <div class="page-content" id="page-content">載入中...</div>
             </div>
         </div>
     </div>
@@ -234,63 +166,35 @@
             'phone':     { src: '../image/phone.webp',             type: 'portrait' }
         };
 
-        // 報紙分頁資料
         let currentPage = 0;
         const totalPages = 10;
-        const pageTexts = [
-            "第一頁：自白時報 - 創刊號",
-            "第二頁：那晚的風，吹開了塵封的箱子...",
-            "第三頁：物流單上的名字，漸漸滲出了血跡。",
-            "第四頁：誰在天花板上行走？",
-            "第五頁：不要打開那個紅色信封。",
-            "第六頁：銅鏡裡的妳，真的在笑嗎？",
-            "第七頁：歸心物流，歸的是誰的心？",
-            "第八頁：失物招領：一隻斷掉的手錶。",
-            "第九頁：影子在燈光下慢慢剝離。",
-            "第十頁：真相，就在妳身後。"
-        ];
+        const pageTexts = ["第一頁：內容", "第二頁：內容", "第三頁：內容", "第四頁：內容", "第五頁：內容", "第六頁：內容", "第七頁：內容", "第八頁：內容", "第九頁：內容", "第十頁：內容"];
 
         function updateImageSource() {
             const img = document.getElementById('main-scene');
             if (!img) return;
-            const pcImg = "../image/forget-something.webp";
-            const mobileImg = "../image/forget-something-m.webp";
-            img.src = (window.innerHeight > window.innerWidth) ? mobileImg : pcImg;
+            img.src = (window.innerHeight > window.innerWidth) ? "../image/forget-something-m.webp" : "../image/forget-something.webp";
         }
 
-        // 初始化 10 個小圈圈
         function initDots() {
-    const wrapper = document.getElementById('dot-wrapper');
-    wrapper.innerHTML = '';
-    for (let i = 0; i < totalPages; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'dot' + (i === currentPage ? ' active' : '');
-        
-        // 💡 重點：加上點擊事件，讓它跳轉到第 i 頁
-        dot.onclick = () => {
-            currentPage = i;
-            renderPage();
-        };
-        
-        wrapper.appendChild(dot);
-    }
-}
+            const wrapper = document.getElementById('dot-wrapper');
+            wrapper.innerHTML = '';
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === currentPage ? ' active' : '');
+                dot.onclick = () => { currentPage = i; renderPage(); };
+                wrapper.appendChild(dot);
+            }
+        }
 
-        // 切換頁面
         function changePage(step) {
             currentPage = (currentPage + step + totalPages) % totalPages;
             renderPage();
         }
 
         function renderPage() {
-            const content = document.getElementById('page-content');
-            content.innerText = pageTexts[currentPage];
-            
-            // 更新圈圈顏色
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentPage);
-            });
+            document.getElementById('page-content').innerText = pageTexts[currentPage];
+            document.querySelectorAll('.dot').forEach((dot, index) => dot.classList.toggle('active', index === currentPage));
         }
 
         function handleDetailPopup(key) {
@@ -298,19 +202,12 @@
             const overlay = document.getElementById('detail-overlay');
             const detailImg = document.getElementById('detail-img');
             const newsExtras = document.getElementById('newspaper-extras');
-
             detailImg.src = asset.src;
             detailImg.className = (asset.type === 'portrait') ? 'img-portrait' : 'img-square';
-            
             if (key === 'newspaper') {
-                newsExtras.style.display = 'block';
-                currentPage = 0; // 每次打開重置到第一頁
-                initDots();
-                renderPage();
-            } else {
-                newsExtras.style.display = 'none';
-            }
-            
+                newsExtras.style.display = 'flex';
+                currentPage = 0; initDots(); renderPage();
+            } else { newsExtras.style.display = 'none'; }
             overlay.style.display = 'flex';
             setTimeout(() => overlay.classList.add('show'), 10);
         }
@@ -323,7 +220,6 @@
 
         updateImageSource();
         window.addEventListener('resize', updateImageSource);
-        window.addEventListener('orientationchange', updateImageSource);
     </script>
 </body>
 </html>
