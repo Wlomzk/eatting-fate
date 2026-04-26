@@ -6,7 +6,7 @@
     <title>歸心物流 - 忘了什麼嗎？</title>
     <link rel="icon" href="../image/GUIXIN.webp" type="image/webp">
     <style>
-        /* --- 基礎佈局 --- */
+        /* --- 基礎佈局 (完全保留把拔的原版) --- */
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
@@ -30,8 +30,7 @@
         .header-bar a { color: rgba(255, 255, 255, 0.9); text-decoration: none; font-size: 0.9rem; letter-spacing: 0.2em; }
 
         .scene-wrapper {
-            flex: 1;
-            display: flex; justify-content: center; align-items: center;
+            flex: 1; display: flex; justify-content: center; align-items: center;
             position: relative; width: 100%; height: 100vh;
         }
 
@@ -43,7 +42,6 @@
 
         .scene-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
-        /* 互動點 */
         .hotspot {
             position: absolute; cursor: pointer; border-radius: 50%;
             background: radial-gradient(circle at center, rgba(0, 255, 120, 0.5) 0%, transparent 70%);
@@ -71,7 +69,6 @@
             50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.15); }
         }
 
-        /* 彈出視窗 */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95);
@@ -86,46 +83,52 @@
 
         /* 📰 報紙專用 UI */
         .newspaper-ui {
-            position: absolute; display: none; width: 64%; height: 72%; top: 16%; left: 18%;
+            position: absolute; display: none; width: 64%; height: 75%; top: 14%; left: 18%;
             border-radius: 20px; overflow: hidden;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.06) 60%, transparent 100%);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            z-index: 3010; touch-action: pan-y; /* 💡 允許上下捲動，但攔截左右滑動 */
+            z-index: 3010; touch-action: pan-y;
         }
 
-        /* 💡 一大二小圖片區 */
-        .egg-grid {
-            display: flex; gap: 8px; width: 90%; height: 45%; margin: 15px auto 5px;
+        /* 💡 重新定義：圖文混排區域 */
+        .egg-layout {
+            display: flex; flex-direction: column; gap: 12px;
+            width: 90%; height: 70%; margin: 20px auto 0;
+            color: white; font-size: 0.75rem;
         }
-        .egg-main { flex: 2; background: #000; border-radius: 8px; }
-        .egg-side { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-        .egg-small { flex: 1; background: #000; border-radius: 8px; }
-        .egg-img-placeholder { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+
+        .row-large { display: flex; gap: 10px; height: 40%; }
+        .row-small { display: flex; gap: 10px; height: 25%; align-items: center; }
+
+        .egg-box { background: #000; border-radius: 6px; overflow: hidden; }
+        .egg-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .egg-desc { 
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.05); border-radius: 6px; padding: 5px;
+            text-align: center; line-height: 1.3;
+        }
 
         .pagination-container {
-            position: absolute; bottom: 2%; left: 0; width: 100%; box-sizing: border-box;
-            padding: 0 5%; display: flex; flex-direction: column; align-items: center; gap: 5px;
+            position: absolute; bottom: 2%; left: 0; width: 100%;
+            padding: 0 5%; display: flex; flex-direction: column; align-items: center;
             pointer-events: none;
         }
         .controls-row { width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: auto; }
         .nav-btn {
             width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent;
-            cursor: pointer; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8));
-            transition: transform 0.2s, opacity 0.2s; opacity: 0.8; pointer-events: auto;
+            cursor: pointer; opacity: 0.8; transition: 0.2s; pointer-events: auto;
         }
-        .nav-btn:hover { opacity: 1; transform: scale(1.1); }
         .btn-left { border-right: 25px solid rgba(148, 76, 13, 0.9); }
         .btn-right { border-left: 25px solid rgba(148, 76, 13, 0.9); }
 
         .dot-wrapper { flex: 1; display: flex; justify-content: space-evenly; align-items: center; margin: 0 20px; pointer-events: auto; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transition: all 0.3s ease; cursor: pointer; }
-        .dot.active { background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; }
+        .dot.active { background: #fff; box-shadow: 0 0 8px #fff; }
 
-        .page-content-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; width: 100%; }
         .page-content {
-            color: white; text-align: center; font-size: 0.8rem; line-height: 1.4;
-            height: 2.8em; overflow: hidden; text-shadow: 0 0 10px rgba(0,0,0,0.8);
-            letter-spacing: 0.1em; margin-top: 5px;
+            color: white; text-align: center; font-size: 0.8rem; height: 2.8em; 
+            overflow: hidden; margin-top: 5px; pointer-events: none;
         }
 
         .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 3100; }
@@ -156,11 +159,18 @@
             <img id="detail-img" src="" alt="Detail View">
 
             <div id="newspaper-extras" class="newspaper-ui">
-                <div class="egg-grid">
-                    <div class="egg-main"><img id="egg-img-1" class="egg-img-placeholder" src=""></div>
-                    <div class="egg-side">
-                        <div class="egg-small"><img id="egg-img-2" class="egg-img-placeholder" src=""></div>
-                        <div class="egg-small"><img id="egg-img-3" class="egg-img-placeholder" src=""></div>
+                <div class="egg-layout">
+                    <div class="row-large">
+                        <div class="egg-box" style="flex: 2;"><img id="egg-img-1" src=""></div>
+                        <div class="egg-desc" id="egg-desc-1">這是大方塊的隨機文字</div>
+                    </div>
+                    <div class="row-small">
+                        <div class="egg-desc" id="egg-desc-2">小方塊一說明</div>
+                        <div class="egg-box" style="flex: 1; height: 100%;"><img id="egg-img-2" src=""></div>
+                    </div>
+                    <div class="row-small">
+                        <div class="egg-desc" id="egg-desc-3">小方塊二說明</div>
+                        <div class="egg-box" style="flex: 1; height: 100%;"><img id="egg-img-3" src=""></div>
                     </div>
                 </div>
 
@@ -170,9 +180,7 @@
                         <div class="dot-wrapper" id="dot-wrapper"></div>
                         <div class="nav-btn btn-right" onclick="changePage(1)"></div>
                     </div>
-                    <div class="page-content-wrapper">
-                        <div class="page-content" id="page-content">載入中...</div>
-                    </div>
+                    <div class="page-content" id="page-content">載入中...</div>
                 </div>
             </div>
         </div>
@@ -189,18 +197,19 @@
 
         let currentPage = 0;
         const totalPages = 10;
-        // 💡 每一頁的資料結構
+        
+        // 💡 每一頁的資料：包含主文字、三張圖、三個方塊描述
         const pageData = [
-            { text: "這是一封神祕信件", imgs: ["", "", ""] },
-            { text: "發現了物流單據", imgs: ["", "", ""] },
-            { text: "誰留下的舊照片？", imgs: ["", "", ""] },
-            { text: "這裡似乎有血跡", imgs: ["", "", ""] },
-            { text: "破碎的鏡子碎片", imgs: ["", "", ""] },
-            { text: "一張過期的車票", imgs: ["", "", ""] },
-            { text: "神祕的黑色鑰匙", imgs: ["", "", ""] },
-            { text: "最後的歸宿地點", imgs: ["", "", ""] },
-            { text: "未送達的包裹單", imgs: ["", "", ""] },
-            { text: "忘不了的那個人", imgs: ["", "", ""] }
+            { text: "第一頁：自自自自自自自自", eggImgs: ["","",""], eggDescs: ["主要線索說明","細節一","細節二"] },
+            { text: "第二頁：自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["包裹的秘密","條碼","發貨地"] },
+            { text: "第三頁：自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["舊照片","場景","人物"] },
+            { text: "第四頁：自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字A","隨機B","隨機C"] },
+            { text: "第五頁：自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["線索","狀態","備註"] },
+            { text: "第六頁：自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["資料一","資料二","資料三"] },
+            { text: "第七頁：自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] },
+            { text: "第八頁：自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] },
+            { text: "第九頁：自自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] },
+            { text: "第十頁：自自自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] }
         ];
 
         function updateImageSource() {
@@ -226,20 +235,14 @@
         }
 
         function renderPage() {
-            const content = document.getElementById('page-content');
-            const current = pageData[currentPage];
-            if (content) content.innerText = current.text;
+            const data = pageData[currentPage];
+            document.getElementById('page-content').innerText = data.text;
             
-            // 更新三張圖片
             for(let i=1; i<=3; i++) {
                 const imgEl = document.getElementById(`egg-img-${i}`);
-                if(current.imgs[i-1]) {
-                    imgEl.src = current.imgs[i-1];
-                    imgEl.style.opacity = "1";
-                } else {
-                    imgEl.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // 清空
-                    imgEl.style.backgroundColor = "#000"; // 顯示黑色背景
-                }
+                const descEl = document.getElementById(`egg-desc-${i}`);
+                imgEl.src = data.eggImgs[i-1] || "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                descEl.innerText = data.eggDescs[i-1];
             }
 
             document.querySelectorAll('.dot').forEach((dot, index) => {
@@ -258,13 +261,11 @@
             
             if (key === 'newspaper') {
                 newsExtras.style.display = 'block';
-                currentPage = 0;
                 initDots();
                 renderPage();
             } else {
                 newsExtras.style.display = 'none';
             }
-            
             overlay.style.display = 'flex';
             setTimeout(() => overlay.classList.add('show'), 10);
         }
@@ -275,7 +276,7 @@
             setTimeout(() => { overlay.style.display = 'none'; }, 400);
         }
 
-        // 💡 手機滑動翻頁邏輯
+        // 滑動翻頁邏輯
         let touchStartX = 0;
         let touchEndX = 0;
         const newspaperUI = document.getElementById('newspaper-extras');
@@ -283,14 +284,9 @@
         newspaperUI.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
         newspaperUI.addEventListener('touchend', e => {
             touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
+            if (touchEndX < touchStartX - 50) changePage(1);
+            if (touchEndX > touchStartX + 50) changePage(-1);
         }, false);
-
-        function handleSwipe() {
-            const swipeThreshold = 50; // 滑動門檻
-            if (touchEndX < touchStartX - swipeThreshold) changePage(1);  // 左滑 -> 下一頁
-            if (touchEndX > touchStartX + swipeThreshold) changePage(-1); // 右滑 -> 上一頁
-        }
 
         updateImageSource();
         window.addEventListener('resize', updateImageSource);
