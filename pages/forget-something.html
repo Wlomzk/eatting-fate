@@ -73,7 +73,7 @@
             transform: translate(-50%, -50%) scale(1.3);
         }
 
-        /* 桌面版座標 */
+        /* 桌面版座標 (要把拔的心血，絕對不動) */
         #turtle-shell { width: 10%; height: 15%; left: 11.5%; top: 69%; }
         #newspaper    { width: 12%; height: 15%; left: 10%; top: 86%; }
         #crt-monitor  { width: 8%; height: 10%; left: 24%; top: 77.5%; }
@@ -111,37 +111,41 @@
         .img-portrait { height: 90vh; width: auto; object-fit: contain; }
         .img-square { width: 90vw; height: auto; max-height: 90vh; object-fit: contain; }
 
-        /* --- 📰 報紙專用 UI (霧化處理) --- */
+        /* --- 📰 報紙專用 UI (霧化修正版) --- */
         .newspaper-ui {
             position: absolute;
             display: none;
-            /* 還原把拔原本調整好的完美座標 */
             width: 64%; height: 70%; 
             top: 18%; left: 18%;
             
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             
-            /* 霧化效果：移除邊框，使用柔和的外陰影 */
-            -webkit-mask-image: radial-gradient(circle, black 50%, transparent 95%);
-    mask-image: radial-gradient(circle, black 50%, transparent 95%);
-    
-    border: none;
-    z-index: 3010;
+            /* 💡 使用陰影疊加實現完全霧化，不影響內部元件 */
+            border: none;
+            box-shadow: 
+                0 0 60px 30px rgba(255, 255, 255, 0.05),
+                inset 0 0 50px 20px rgba(0, 0, 0, 0.2);
+            
+            z-index: 3010;
+            overflow: visible;
         }
 
-        /* 下方導航容器 (包含三角形和小圈圈) */
+        /* 下方導航容器 */
         .pagination-container {
             position: absolute;
-            bottom: 8%; /* 稍微往上移一點 */
-            left: 0; width: 100%;
-            display: flex; justify-content: center; align-items: center;
-            gap: 15px;
+            bottom: 0; left: 0; width: 100%; height: 120px; /* 固定高度便於文字置中 */
+            display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
             pointer-events: none;
         }
 
-        /* 三角形按鈕 (往內縮) */
+        /* 控制按鈕與圈圈的橫列 */
+        .controls-row {
+            display: flex; justify-content: center; align-items: center;
+            gap: 15px; margin-top: 10px;
+        }
+
         .nav-btn {
             width: 0; height: 0;
             border-top: 10px solid transparent;
@@ -151,44 +155,29 @@
             transition: transform 0.2s;
             pointer-events: auto;
         }
-
         .nav-btn:active { transform: scale(0.9); }
+        .btn-left { border-right: 25px solid rgba(148, 76, 13, 0.9); margin-right: 10px; }
+        .btn-right { border-left: 25px solid rgba(148, 76, 13, 0.9); margin-left: 10px; }
 
-        .btn-left {
-            border-right: 5px solid rgba(148, 76, 13, 0.9);
-            margin-right: 10px; /* 增加與圈圈的間隔，達到內縮視覺 */
-        }
-
-        .btn-right {
-            border-left: 5px solid rgba(148, 76, 13, 0.9);
-            margin-left: 10px;
-        }
-
-        /* 小圈圈 */
         .dot-wrapper { display: flex; gap: 8px; align-items: center; }
-        
         .dot {
-            width: 10px; height: 10px;
-            border-radius: 50%;
+            width: 10px; height: 10px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            pointer-events: auto;
+            transition: all 0.3s ease; cursor: pointer; pointer-events: auto;
         }
-
         .dot.active {
-            background: rgba(0, 0, 0, 0.8); /* 當前頁深色 */
+            background: rgba(0, 0, 0, 0.8);
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
-        /* 頁面文字 (改到圈圈下面) */
+        /* 💡 頁面文字：確保在圈圈與毛玻璃下緣之間置中 */
+        .page-content-wrapper {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            width: 100%;
+        }
+
         .page-content {
-            position: absolute;
-            bottom: 3%; /* 位於圈圈容器下方 */
-            left: 0; width: 100%;
-            color: white;
-            text-align: center;
-            font-size: 1.1rem;
+            color: white; text-align: center; font-size: 1.1rem;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
             letter-spacing: 0.1em;
         }
@@ -225,17 +214,20 @@
 
             <div id="newspaper-extras" class="newspaper-ui">
                 <div class="pagination-container">
-                    <div class="nav-btn btn-left" onclick="changePage(-1)"></div>
-                    <div class="dot-wrapper" id="dot-wrapper"></div>
-                    <div class="nav-btn btn-right" onclick="changePage(1)"></div>
-                    <div class="page-content" id="page-content">載入中...</div>
+                    <div class="controls-row">
+                        <div class="nav-btn btn-left" onclick="changePage(-1)"></div>
+                        <div class="dot-wrapper" id="dot-wrapper"></div>
+                        <div class="nav-btn btn-right" onclick="changePage(1)"></div>
+                    </div>
+                    <div class="page-content-wrapper">
+                        <div class="page-content" id="page-content">載入中...</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 資料資產
         const detailAssets = {
             'turtle':    { src: '../image/end3/turtle-shell.webp', type: 'portrait' },
             'newspaper': { src: '../image/newspaper.webp',      type: 'portrait' },
@@ -244,7 +236,6 @@
             'phone':     { src: '../image/phone.webp',             type: 'portrait' }
         };
 
-        // 報紙分頁變數
         let currentPage = 0;
         const totalPages = 10;
         const pageTexts = [
@@ -260,32 +251,23 @@
             "第十頁：真相，就在妳身後。"
         ];
 
-        // 響應式圖片載入
         function updateImageSource() {
             const img = document.getElementById('main-scene');
             if (!img) return;
-            const pcImg = "../image/forget-something.webp";
-            const mobileImg = "../image/forget-something-m.webp";
-            img.src = (window.innerHeight > window.innerWidth) ? mobileImg : pcImg;
+            img.src = (window.innerHeight > window.innerWidth) ? "../image/forget-something-m.webp" : "../image/forget-something.webp";
         }
 
-        // 分頁小圈圈初始化
         function initDots() {
             const wrapper = document.getElementById('dot-wrapper');
             wrapper.innerHTML = '';
             for (let i = 0; i < totalPages; i++) {
                 const dot = document.createElement('div');
                 dot.className = 'dot' + (i === currentPage ? ' active' : '');
-                // 點擊圈圈跳轉
-                dot.onclick = () => {
-                    currentPage = i;
-                    renderPage();
-                };
+                dot.onclick = () => { currentPage = i; renderPage(); };
                 wrapper.appendChild(dot);
             }
         }
 
-        // 切換頁面邏輯
         function changePage(step) {
             currentPage = (currentPage + step + totalPages) % totalPages;
             renderPage();
@@ -293,17 +275,12 @@
 
         function renderPage() {
             const content = document.getElementById('page-content');
-            if (content) {
-                content.innerText = pageTexts[currentPage];
-            }
-            // 更新圈圈狀態
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach((dot, index) => {
+            if (content) content.innerText = pageTexts[currentPage];
+            document.querySelectorAll('.dot').forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentPage);
             });
         }
 
-        // 開啟詳情彈窗
         function handleDetailPopup(key) {
             const asset = detailAssets[key];
             const overlay = document.getElementById('detail-overlay');
@@ -313,7 +290,6 @@
             detailImg.src = asset.src;
             detailImg.className = (asset.type === 'portrait') ? 'img-portrait' : 'img-square';
             
-            // 判斷是否為報紙顯示 UI
             if (key === 'newspaper') {
                 newsExtras.style.display = 'block';
                 currentPage = 0;
@@ -327,20 +303,14 @@
             setTimeout(() => overlay.classList.add('show'), 10);
         }
 
-        // 關閉詳情彈窗
         function closeDetail() {
             const overlay = document.getElementById('detail-overlay');
             overlay.classList.remove('show');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 400);
+            setTimeout(() => { overlay.style.display = 'none'; }, 400);
         }
 
-        // 監聽視窗變化
         updateImageSource();
         window.addEventListener('resize', updateImageSource);
-        window.addEventListener('orientationchange', updateImageSource);
-
     </script>
 </body>
 </html>
