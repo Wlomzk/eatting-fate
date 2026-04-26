@@ -42,18 +42,24 @@
         </button>
     </div>
 
-    <div id="mobile-menu" class="fixed inset-0 z-[60] transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
-        <div class="absolute inset-0 bg-stone-900/40 backdrop-blur-sm" id="menu-overlay"></div>
-        <div class="absolute right-0 top-0 h-full w-64 bg-white/95 shadow-xl flex flex-col p-8 space-y-8 tracking-[0.2em]">
-            <button id="close-menu" class="self-end text-stone-500">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <a href="javascript:void(0)" onclick="toggleMenu(); showPage('services')" class="text-stone-800 text-lg border-b border-stone-100 pb-2">服務項目</a>
-            <a href="javascript:void(0)" onclick="toggleMenu(); showPage('locations')" class="text-stone-800 text-lg border-b border-stone-100 pb-2">配送據點</a>
-            <a href="pages/forget-something.html" class="text-stone-800 text-lg border-b border-stone-100 pb-2">失物招領處</a>
-            <a href="login.html" class="bg-[#3d3832] text-[#d9d4cc] px-4 py-3 rounded text-center shadow-lg mt-4">加盟登入</a>
-        </div>
+    <div id="mobile-menu" class="fixed inset-0 z-[60] hidden flex-col items-center justify-center bg-stone-900/95 backdrop-blur-lg">
+    <button id="close-menu" class="absolute top-8 right-8 text-white/70 hover:text-white">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+
+    <div class="flex flex-col items-center space-y-10 tracking-[0.4em] text-white">
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('home')" class="text-2xl font-light hover:text-stone-400 transition-colors">回首頁</a>
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('services')" class="text-2xl font-light hover:text-stone-400 transition-colors">服務項目</a>
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('locations')" class="text-2xl font-light hover:text-stone-400 transition-colors">配送據點</a>
+        <a href="pages/forget-something.html" class="text-2xl font-light hover:text-stone-400 transition-colors">失物招領處</a>
+        
+        <a href="login.html" class="mt-4 px-12 py-3 bg-[#d9d4cc] text-[#3d3832] rounded text-lg font-bold shadow-2xl">
+            加盟登入
+        </a>
     </div>
+</div>
 </nav>
 
     <header id="page-home" class="hero-banner py-12 md:py-20 px-6 md:px-12 text-center">

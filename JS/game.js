@@ -1,8 +1,25 @@
-// 歸心物流：系統核心邏輯 (v3.0 JSON 動態載入版)
+// --- [ 1. 手機版全螢幕選單控制 ] ---
+window.toggleMenu = function() {
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (!mobileMenu) return;
 
+    // 切換 hidden (隱藏) 與 flex (顯示)
+    if (mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('flex');
+        // 防止選單打開時，後面的網頁還能滾動
+        document.body.style.overflow = 'hidden';
+    } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+        // 恢復網頁滾動
+        document.body.style.overflow = '';
+    }
+};
+
+// --- [ 2. 核心資料與成就系統 ] ---
 let unlockedItems = JSON.parse(localStorage.getItem('guixin_archive')) || [];
 
-// 核心查詢功能
 window.handleTrack = function() {
     const input = document.getElementById('trackInput');
     const resultContent = document.getElementById('result-content');
@@ -16,7 +33,6 @@ window.handleTrack = function() {
     const keyword = input.value.trim();
     resultArea.style.display = 'block';
 
-    // 【核心變動】：不從 JS 找，而是跑去 data/items.json 抓資料
     fetch('data/items.json')
         .then(response => {
             if (!response.ok) throw new Error('無法讀取資料庫');
@@ -28,7 +44,6 @@ window.handleTrack = function() {
                 resultContent.innerHTML = `<span style="color: #3d3832; font-weight: bold;">【檢索成功】</span><br>「${item.title}」：${item.content}`;
                 resultContent.style.color = '#3d3832';
 
-                // 紀錄成就
                 if (!unlockedItems.includes(keyword)) {
                     unlockedItems.push(keyword);
                     localStorage.setItem('guixin_archive', JSON.stringify(unlockedItems));
@@ -45,11 +60,12 @@ window.handleTrack = function() {
         });
 };
 
-// 渲染已解鎖清單
 function renderArchive() {
     const archiveSection = document.getElementById('archive-section');
     const keywordList = document.getElementById('keyword-list');
     const completionRate = document.getElementById('completion-rate');
+
+    if (!archiveSection || !keywordList) return;
 
     if (unlockedItems.length > 0) {
         archiveSection.classList.remove('hidden');
@@ -60,34 +76,32 @@ function renderArchive() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', renderArchive);
-// 切換頁面功能
-function showPage(pageName) {
-    // 1. 所有的頁面 ID
+// --- [ 3. 頁面切換邏輯 ] ---
+window.showPage = function(pageName) {
     const pages = ['page-home', 'page-services', 'page-locations'];
     
-    // 2. 先把所有頁面都藏起來 (加上 hidden)
     pages.forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
     });
     
-    // 3. 把點選的那一頁顯示出來 (移除 hidden)
-    document.getElementById('page-' + pageName).classList.remove('hidden');
+    const target = document.getElementById('page-' + pageName);
+    if (target) target.classList.remove('hidden');
     
-    // 4. 自動捲動回頂端，才不會換頁後卡在中間
+    // 如果是手機選單開啟狀態下跳轉，自動關閉選單
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+        toggleMenu();
+    }
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-window.toggleMenu = function() {
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (mobileMenu) {
-        mobileMenu.classList.toggle('translate-x-full');
-        mobileMenu.classList.toggle('translate-x-0');
-    }
-};
-
-// 等網頁載入完後，綁定點擊事件
+// --- [ 4. 事件監聽初始化 ] ---
 document.addEventListener('DOMContentLoaded', () => {
+    renderArchive();
+
+    // 綁定選單按鈕
     const menuBtn = document.getElementById('mobile-menu-button');
     const closeBtn = document.getElementById('close-menu');
     const overlay = document.getElementById('menu-overlay');
