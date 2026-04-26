@@ -178,15 +178,15 @@
     transform: scale(1.1);
 }
         .nav-btn:active { transform: scale(0.9); }
-        .btn-left { border-right: 25px solid rgba(148, 76, 13, 0.9); margin-right: 10px; }
-        .btn-right { border-left: 25px solid rgba(148, 76, 13, 0.9); margin-left: 10px; }
+        .btn-left { border-right: 25px solid rgba(148, 76, 13, 0.9); margin-right: 0px; }
+        .btn-right { border-left: 25px solid rgba(148, 76, 13, 0.9); margin-left: 0px; }
 
         .dot-wrapper { 
-    flex: 1;            /* 💡 搶占剩餘寬度 */
+    flex: 1; 
     display: flex; 
-    justify-content: space-evenly; /* 💡 均勻分布：讓圈圈左右間距完全相等 */
-    align-items: center; 
-    margin: 0 15px;     /* 💡 給左右三角形留一點點呼吸空間，不要貼死 */
+    justify-content: space-between; /* 💡 改成 space-between 或 space-evenly，讓它們填滿 */
+    align-items: center;  
+    margin: 0 20px;     /* 💡 給圓圈跟三角形之間留一點點高級的呼吸感就好 */
     pointer-events: auto;
 }
         .dot {
