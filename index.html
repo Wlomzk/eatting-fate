@@ -42,7 +42,9 @@
         </button>
     </div>
 
-    <div id="mobile-menu" class="fixed inset-0 z-[100] hidden flex-col items-center justify-start" style="background-color: #1a1816; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);">
+    <div id="mobile-menu" 
+     class="fixed inset-0 hidden flex-col items-center justify-start" 
+     style="z-index: 9999 !important; background-color: #1a1816 !important; position: fixed !important; height: 100vh !important; width: 100vw !important;">
     
     <div class="w-full flex justify-end p-8">
         <button id="close-menu" class="text-white/70 hover:text-white transition-all">
@@ -52,19 +54,19 @@
         </button>
     </div>
 
-    <div class="flex flex-col items-center space-y-12 tracking-[0.6em] text-[#d9d4cc] pt-10">
-        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('home')" class="text-3xl font-light hover:text-white transition-colors">回 首 頁</a>
-        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('services')" class="text-3xl font-light hover:text-white transition-colors">服 務 項 目</a>
-        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('locations')" class="text-3xl font-light hover:text-white transition-colors">配 送 據 點</a>
-        <a href="pages/forget-something.html" class="text-3xl font-light hover:text-white transition-colors">失物招領處</a>
+    <div class="flex flex-col items-center space-y-12 tracking-[0.6em] text-[#d9d4cc] mt-10">
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('home')" class="text-3xl font-light">回 首 頁</a>
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('services')" class="text-3xl font-light">服 務 項 目</a>
+        <a href="javascript:void(0)" onclick="toggleMenu(); showPage('locations')" class="text-3xl font-light">配 送 據 點</a>
+        <a href="pages/forget-something.html" class="text-3xl font-light">失物招領處</a>
         
-        <a href="login.html" class="mt-8 px-16 py-4 bg-[#d9d4cc] text-[#3d3832] rounded-sm text-xl font-bold shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <a href="login.html" class="mt-8 px-16 py-4 bg-[#d9d4cc] text-[#3d3832] rounded-sm text-xl font-bold shadow-2xl">
             加 盟 登 入
         </a>
     </div>
 
-    <div class="absolute bottom-12 text-[10px] text-white/20 tracking-[0.5em] uppercase">
-        Guixin Systems Access / v3.0
+    <div class="absolute bottom-12 text-[10px] text-white/20 tracking-[0.5em]">
+        GUIXIN LOGISTICS / MOBILE ACCESS
     </div>
 </div>
 </nav>
