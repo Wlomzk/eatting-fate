@@ -6,7 +6,7 @@
     <title>歸心物流 - 忘了什麼嗎？</title>
     <link rel="icon" href="../image/GUIXIN.webp" type="image/webp">
     <style>
-        /* --- 基礎佈局 (完全保留把拔的原版) --- */
+        /* --- 基礎佈局 (維持原樣) --- */
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
@@ -90,10 +90,10 @@
             z-index: 3010; touch-action: pan-y;
         }
 
-        /* 💡 重新定義：圖文混排區域 */
+        /* 💡 圖文混排區域 - 修正外邊距確保置中 */
         .egg-layout {
             display: flex; flex-direction: column; gap: 12px;
-            width: 90%; height: 70%; margin: 20px auto 0;
+            width: 90%; height: 68%; margin: 20px auto 0;
             color: white; font-size: 0.75rem;
         }
 
@@ -105,16 +105,24 @@
         
         .egg-desc { 
             flex: 1; display: flex; align-items: center; justify-content: center;
-            background: rgba(255, 255, 255, 0.05); border-radius: 6px; padding: 5px;
-            text-align: center; line-height: 1.3;
+            background: rgba(255, 255, 255, 0.05); border-radius: 6px; padding: 8px;
+            text-align: center; line-height: 1.4;
         }
 
+        /* 💡 翻頁導航 - 修正置中問題 */
         .pagination-container {
-            position: absolute; bottom: 2%; left: 0; width: 100%;
-            padding: 0 5%; display: flex; flex-direction: column; align-items: center;
+            position: absolute; bottom: 3%; left: 50%; 
+            transform: translateX(-50%); /* 確保水平絕對置中 */
+            width: 90%;
+            display: flex; flex-direction: column; align-items: center;
             pointer-events: none;
         }
-        .controls-row { width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: auto; }
+
+        .controls-row { 
+            width: 100%; display: flex; justify-content: space-between; 
+            align-items: center; pointer-events: auto;
+        }
+
         .nav-btn {
             width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent;
             cursor: pointer; opacity: 0.8; transition: 0.2s; pointer-events: auto;
@@ -122,13 +130,19 @@
         .btn-left { border-right: 25px solid rgba(148, 76, 13, 0.9); }
         .btn-right { border-left: 25px solid rgba(148, 76, 13, 0.9); }
 
-        .dot-wrapper { flex: 1; display: flex; justify-content: space-evenly; align-items: center; margin: 0 20px; pointer-events: auto; }
+        .dot-wrapper { 
+            flex: 1; display: flex; justify-content: space-evenly; 
+            align-items: center; margin: 0 15px; 
+        }
+
         .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; }
         .dot.active { background: #fff; box-shadow: 0 0 8px #fff; }
 
         .page-content {
-            color: white; text-align: center; font-size: 0.8rem; height: 2.8em; 
-            overflow: hidden; margin-top: 5px; pointer-events: none;
+            color: white; text-align: center; font-size: 0.85rem; height: 2.8em; 
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; margin-top: 8px; pointer-events: none;
+            width: 100%;
         }
 
         .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 3100; }
@@ -162,14 +176,14 @@
                 <div class="egg-layout">
                     <div class="row-large">
                         <div class="egg-box" style="flex: 2;"><img id="egg-img-1" src=""></div>
-                        <div class="egg-desc" id="egg-desc-1">這是大方塊的隨機文字</div>
+                        <div class="egg-desc" id="egg-desc-1">大方塊說明...</div>
                     </div>
                     <div class="row-small">
-                        <div class="egg-desc" id="egg-desc-2">小方塊一說明</div>
+                        <div class="egg-desc" id="egg-desc-2">小方塊一說明...</div>
                         <div class="egg-box" style="flex: 1; height: 100%;"><img id="egg-img-2" src=""></div>
                     </div>
                     <div class="row-small">
-                        <div class="egg-desc" id="egg-desc-3">小方塊二說明</div>
+                        <div class="egg-desc" id="egg-desc-3">小方塊二說明...</div>
                         <div class="egg-box" style="flex: 1; height: 100%;"><img id="egg-img-3" src=""></div>
                     </div>
                 </div>
@@ -180,7 +194,7 @@
                         <div class="dot-wrapper" id="dot-wrapper"></div>
                         <div class="nav-btn btn-right" onclick="changePage(1)"></div>
                     </div>
-                    <div class="page-content" id="page-content">載入中...</div>
+                    <div class="page-content" id="page-content">自自自自自自自自</div>
                 </div>
             </div>
         </div>
@@ -198,18 +212,18 @@
         let currentPage = 0;
         const totalPages = 10;
         
-        // 💡 每一頁的資料：包含主文字、三張圖、三個方塊描述
+        // 💡 恢復把拔的「自自自」風格，並加入三個方塊的描述資料
         const pageData = [
-            { text: "第一頁：自自自自自自自自", eggImgs: ["","",""], eggDescs: ["主要線索說明","細節一","細節二"] },
-            { text: "第二頁：自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["包裹的秘密","條碼","發貨地"] },
-            { text: "第三頁：自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["舊照片","場景","人物"] },
-            { text: "第四頁：自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字A","隨機B","隨機C"] },
-            { text: "第五頁：自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["線索","狀態","備註"] },
-            { text: "第六頁：自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["資料一","資料二","資料三"] },
-            { text: "第七頁：自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] },
-            { text: "第八頁：自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] },
-            { text: "第九頁：自自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] },
-            { text: "第十頁：自自自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["隨機文字","隨機文字","隨機文字"] }
+            { text: "第一頁：自自自自自自自自", eggImgs: ["","",""], eggDescs: ["大塊的描述在此","細節 A","細節 B"] },
+            { text: "第二頁：自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["這頁的主線索","細節 C","細節 D"] },
+            { text: "第三頁：自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["這裡放文字...","...","..."] },
+            { text: "第四頁：自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
+            { text: "第五頁：自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
+            { text: "第六頁：自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
+            { text: "第七頁：自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
+            { text: "第八頁：自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
+            { text: "第九頁：自自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
+            { text: "第十頁：自自自自自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] }
         ];
 
         function updateImageSource() {
@@ -241,6 +255,7 @@
             for(let i=1; i<=3; i++) {
                 const imgEl = document.getElementById(`egg-img-${i}`);
                 const descEl = document.getElementById(`egg-desc-${i}`);
+                // 確保圖片在沒網址時顯示黑色
                 imgEl.src = data.eggImgs[i-1] || "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
                 descEl.innerText = data.eggDescs[i-1];
             }
@@ -276,7 +291,7 @@
             setTimeout(() => { overlay.style.display = 'none'; }, 400);
         }
 
-        // 滑動翻頁邏輯
+        // 滑動翻頁
         let touchStartX = 0;
         let touchEndX = 0;
         const newspaperUI = document.getElementById('newspaper-extras');
