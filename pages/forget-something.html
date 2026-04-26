@@ -51,7 +51,7 @@
             display: block;
         }
 
-        /* --- 互動點修正 --- */
+        /* 互動點 */
         .hotspot {
             position: absolute;
             cursor: pointer;
@@ -61,31 +61,25 @@
             filter: blur(8px);
             transform: translate(-50%, -50%);
             z-index: 500;
-            opacity: 0.2; /* 平常隱約可見 */
+            opacity: 0.2;
             animation: pulse 3s infinite ease-in-out;
         }
 
-        /* 💡 修正：點擊或 Hover 時的「變亮」效果 */
         .hotspot:hover, .hotspot.active {
             opacity: 0.9 !important;
             filter: blur(15px) brightness(1.5);
-            background: radial-gradient(circle at center, rgba(100, 255, 200, 1) 0%, transparent 80%);
             transform: translate(-50%, -50%) scale(1.3);
         }
 
-        /* [💻 桌機版座標 ] */
+        /* 桌機座標 */
         #turtle-shell { width: 10%; height: 15%; left: 11.5%; top: 69%; }
         #newspaper    { width: 12%; height: 15%; left: 10%; top: 86%; }
         #crt-monitor  { width: 8%; height: 10%; left: 24%; top: 77.5%; }
         #lcd-monitor  { width: 10%; height: 15%; left: 84.5%; top: 61.5%; }
         #phone-screen { width: 5%; height: 8%; left: 92.5%; top: 66%; }
 
-        /* [📱 手機版 RWD ] */
         @media (max-aspect-ratio: 1/1) {
-            .scene-container {
-                width: 100vw; height: 177.78vw;
-            }
-            /* 把拔如果覺得手機版位置不準，改下面這組座標就好 */
+            .scene-container { width: 100vw; height: 177.78vw; }
             #turtle-shell { width: 20%; height: 10%; left: 13%; top: 74%; }
             #newspaper    { width: 19%; height: 10%; left: 11%; top: 87%; }
             #crt-monitor  { width: 17%; height: 9%; left: 35%; top: 82%; }
@@ -96,6 +90,32 @@
         @keyframes pulse {
             0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(1); }
             50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        /* --- ✨ 新增：彈出特寫視窗 --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none; justify-content: center; align-items: center;
+            z-index: 3000;
+            opacity: 0; transition: opacity 0.5s ease;
+        }
+
+        .overlay.show { display: flex; opacity: 1; }
+
+        /* 特寫圖片容器 */
+        .detail-view { position: relative; display: flex; justify-content: center; align-items: center; }
+
+        /* 縱向圖：滿高 */
+        .img-portrait { height: 100vh; width: auto; object-fit: contain; }
+        
+        /* 方正圖：滿寬 */
+        .img-square { width: 100vw; height: auto; max-height: 100vh; object-fit: contain; }
+
+        .close-btn {
+            position: absolute; top: 20px; right: 20px;
+            color: #fff; font-size: 2rem; cursor: pointer; z-index: 3001;
+            text-shadow: 0 0 10px #000;
         }
     </style>
 </head>
@@ -110,15 +130,30 @@
         <div class="scene-container">
             <img id="main-scene" src="" class="scene-img" alt="Warehouse">
             
-            <div class="hotspot" id="turtle-shell" onclick="handleSpotClick(this, '烏...烏龜的殼??')"></div>
-            <div class="hotspot" id="newspaper" onclick="handleSpotClick(this, '這些報紙似乎來自不同的時空。')"></div>
-            <div class="hotspot" id="crt-monitor" onclick="handleSpotClick(this, '這裡怎麼有台這麼舊的電腦??')"></div>
-            <div class="hotspot" id="lcd-monitor" onclick="handleSpotClick(this, '監視器畫面上只有一片雜訊。')"></div>
-            <div class="hotspot" id="phone-screen" onclick="handleGlitch(this)"></div>
+            <div class="hotspot" id="turtle-shell" onclick="handleDetailPopup('turtle')"></div>
+            <div class="hotspot" id="newspaper" onclick="handleDetailPopup('newspaper')"></div>
+            <div class="hotspot" id="crt-monitor" onclick="handleDetailPopup('mirror')"></div> <div class="hotspot" id="lcd-monitor" onclick="handleDetailPopup('lcd')"></div>
+            <div class="hotspot" id="phone-screen" onclick="handleDetailPopup('phone')"></div>
+        </div>
+    </div>
+
+    <div class="overlay" id="detail-overlay" onclick="closeDetail()">
+        <div class="close-btn">&times;</div>
+        <div class="detail-view">
+            <img id="detail-img" src="" alt="Detail View">
         </div>
     </div>
 
     <script>
+        // 把拔，圖片路徑我在這裡幫妳設定好了！
+        const detailAssets = {
+            'turtle':    { src: '../image/details/turtle-shell.webp', type: 'portrait' }, // 第二層
+            'newspaper': { src: '../image/newspaper.webp',            type: 'portrait' }, // 第一層
+            'mirror':    { src: '../image/details/mirror.webp',       type: 'portrait' }, // 第二層 (原CRT)
+            'lcd':       { src: '../image/details/lcd-monitor.webp',  type: 'square'   }, // 第二層
+            'phone':     { src: '../image/phone.webp',                type: 'portrait' }  // 第一層
+        };
+
         function updateImageSource() {
             const img = document.getElementById('main-scene');
             if (!img) return;
@@ -127,21 +162,23 @@
             img.src = (window.innerHeight > window.innerWidth) ? mobileImg : pcImg;
         }
 
-        // 💡 點擊互動函數
-        function handleSpotClick(el, message) {
-            el.classList.add('active'); // 點擊時發光
-            setTimeout(() => {
-                alert(message);
-                el.classList.remove('active'); // 關掉彈窗後恢復
-            }, 100);
+        // 💡 處理點擊彈出特寫
+        function handleDetailPopup(key) {
+            const asset = detailAssets[key];
+            const overlay = document.getElementById('detail-overlay');
+            const detailImg = document.getElementById('detail-img');
+
+            detailImg.src = asset.src;
+            detailImg.className = (asset.type === 'portrait') ? 'img-portrait' : 'img-square';
+            
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.classList.add('show'), 10);
         }
 
-        function handleGlitch(el) {
-            el.classList.add('active');
-            setTimeout(() => {
-                alert('訊息顯示：妳以為妳逃掉了嗎？');
-                el.classList.remove('active');
-            }, 100);
+        function closeDetail() {
+            const overlay = document.getElementById('detail-overlay');
+            overlay.classList.remove('show');
+            setTimeout(() => overlay.style.display = 'none', 500);
         }
 
         updateImageSource();
