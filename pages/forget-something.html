@@ -20,8 +20,8 @@
             position: fixed; top: 0; left: 0; width: 100%;
             padding: 1.2rem 5%;
             background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; justify-content: space-between; align-items: center;
             box-sizing: border-box; z-index: 2000;
@@ -44,14 +44,14 @@
 
         .hotspot {
             position: absolute; cursor: pointer; border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(0, 255, 120, 0.5) 0%, transparent 70%);
-            transition: all 0.3s ease; filter: blur(8px); transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(245, 240, 225, 0.3) 0%, rgba(200, 190, 170, 0.08) 100%);
+            transition: all 0.3s ease; filter: blur(6px); transform: translate(-50%, -50%);
             z-index: 500; opacity: 0.2; animation: pulse 3s infinite ease-in-out;
         }
 
         #turtle-shell { width: 10%; height: 15%; left: 11.5%; top: 69%; }
         #newspaper    { width: 12%; height: 15%; left: 10%; top: 86%; }
-        #crt-monitor  { width: 8%; height: 10%; left: 24%; top: 77.5%; }
+        #crt-monitor  { width: 11%; height: 26%; left: 32%; top: 56.5%; }
         #lcd-monitor  { width: 10%; height: 15%; left: 84.5%; top: 61.5%; }
         #phone-screen { width: 5%; height: 8%; left: 92.5%; top: 66%; }
 
@@ -65,8 +65,8 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.15); }
+            0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.15); }
         }
 
         .overlay {
@@ -83,83 +83,82 @@
 
         /* 📰 報紙專用 UI */
         .newspaper-ui {
-            position: absolute; display: none; width: 64%; height: 75%; top: 14%; left: 18%;
-            border-radius: 20px; overflow: hidden;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.06) 60%, transparent 100%);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            z-index: 3010; touch-action: pan-y;
-        }
-
-        /* 💡 圖文混排區域 - 修正外邊距確保置中 */
-        .egg-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;        /* 🚀 間距加大約 2/3，產生疏離感 */
-    width: 90%;
-    height: 78%;
-    margin: 15px auto 0;
-    color: white;
+    position: absolute; 
+    display: none; 
+    width: 64%; 
+    height: 75%; 
+    top: 16.5%; 
+    left: 18%;
+    background: transparent; 
+    z-index: 3010; 
+    touch-action: pan-y;
+    
+    /* 🚀 調整這裡：降低亮度 (brightness) 並增加泛黃感 */
+    filter: sepia(0.4) saturate(0.7) brightness(0.8) contrast(0.9);
 }
+
+        .egg-layout {
+            display: flex; flex-direction: column; gap: 22px; width: 90%; height: 78%; margin: 15px auto 0;
+        }
 
         .row-large { display: flex; gap: 15px; height: 38%; }
         .row-small-1 { display: flex; gap: 15px; height: 22%; align-items: center; }
         .row-small-2 { 
-    display: flex; 
-    gap: 15px; 
-    height: 18%;      /* 🚀 稍微縮小高度 */
-    align-items: center;
-    width: 105%;      /* 🚀 讓寬度稍微超出容器 */
-    margin-left: -5%; /* 🚀 往左邊凸出去，製造不整齊感 */
-}
+            display: flex; gap: 15px; height: 18%; align-items: center;
+            width: 105%; margin-left: -5%; 
+        }
 
         .egg-box { 
-    background: #000; 
-    border-radius: 4px; 
-    overflow: hidden;
-    box-shadow: 3px 3px 10px rgba(0,0,0,0.5); /* 加一點點陰影增加層次 */
-}
-        .egg-box img { width: 100%; height: 100%; object-fit: cover; }
+            background: #000; border-radius: 4px; overflow: hidden;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 2px 2px 8px rgba(0,0,0,0.4);
+            filter: grayscale(0.2); transition: opacity 0.3s ease;
+        }
+        .egg-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        .egg-desc { 
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            background: rgba(255, 255, 255, 0.05); border-radius: 6px; padding: 8px;
-            text-align: center; line-height: 1.4;
-        }
+       .egg-desc {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 12px;
+    text-align: center;
+    color: #f0eada;
+    
+    /* 1. 背景色要「淡」一點，模糊才明顯 (0.45 剛好) */
+    background: rgba(20, 15, 10, 0.45); 
+    
+    /* 2. 毛玻璃效果 (20px 就非常糊了，50px 會變彩色雲霧) */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px); 
+    
+    /* 3. 加上一個細微的亮邊，能幫文字從背景跳出來 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* 4. 確保文字陰影夠重，防止被背景雜色干擾 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
 
-        /* 💡 翻頁導航 - 修正置中問題 */
         .pagination-container {
-            position: absolute; bottom: 3%; left: 50%; 
-            transform: translateX(-50%); /* 確保水平絕對置中 */
-            width: 90%;
-            display: flex; flex-direction: column; align-items: center;
-            pointer-events: none;
+            position: absolute; bottom: 3%; left: 50%; transform: translateX(-50%);
+            width: 85%; display: flex; flex-direction: column; align-items: center;
+            pointer-events: none; background: rgba(0, 0, 0, 0.5);
+            padding: 10px 0; border-radius: 12px; backdrop-filter: blur(5px);
         }
 
-        .controls-row { 
-            width: 100%; display: flex; justify-content: space-between; 
-            align-items: center; pointer-events: auto;
-        }
-
-        .nav-btn {
-            width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent;
-            cursor: pointer; opacity: 0.8; transition: 0.2s; pointer-events: auto;
-        }
+        .controls-row { width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: auto; }
+        .nav-btn { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; cursor: pointer; opacity: 0.8; transition: 0.2s; }
         .btn-left { border-right: 25px solid rgba(148, 76, 13, 0.9); }
         .btn-right { border-left: 25px solid rgba(148, 76, 13, 0.9); }
 
-        .dot-wrapper { 
-            flex: 1; display: flex; justify-content: space-evenly; 
-            align-items: center; margin: 0 15px; 
-        }
-
+        .dot-wrapper { flex: 1; display: flex; justify-content: space-evenly; align-items: center; margin: 0 15px; }
         .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); cursor: pointer; }
-        .dot.active { background: #fff; box-shadow: 0 0 8px #fff; }
+        .dot.active { background: #f0eada; box-shadow: 0 0 8px #f0eada; }
 
         .page-content {
-            color: white; text-align: center; font-size: 0.85rem; height: 2.8em; 
+            color: #f0eada; text-align: center; font-size: 0.85rem; height: 2.8em; 
             display: flex; align-items: center; justify-content: center;
-            overflow: hidden; margin-top: 8px; pointer-events: none;
-            width: 100%;
+            overflow: hidden; margin-top: 8px; width: 100%;
         }
 
         .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 3100; }
@@ -185,35 +184,30 @@
 
     <div class="overlay" id="detail-overlay" onclick="closeDetail()">
         <div class="close-btn" onclick="closeDetail()">&times;</div>
-        
         <div class="detail-view" onclick="event.stopPropagation()">
             <img id="detail-img" src="" alt="Detail View">
-
             <div id="newspaper-extras" class="newspaper-ui">
                 <div class="egg-layout">
-    <div class="row-large">
-        <div class="egg-box" style="flex: 2;"><img id="egg-img-1" src=""></div>
-        <div class="egg-desc" id="egg-desc-1">大方塊說明</div>
-    </div>
-    
-    <div class="row-small-1">
-        <div class="egg-desc" id="egg-desc-2">小方塊一說明</div>
-        <div class="egg-box" style="flex: 1; height: 100%;"><img id="egg-img-2" src=""></div>
-    </div>
-    
-    <div class="row-small-2">
-        <div class="egg-box" style="flex: 0.8; height: 100%;"><img id="egg-img-3" src=""></div>
-        <div class="egg-desc" id="egg-desc-3" style="text-align: left;">小方塊二說明</div>
-    </div>
-</div>
-
+                    <div class="row-large">
+                        <div class="egg-box" style="flex: 2;"><img id="egg-img-1" src=""></div>
+                        <div class="egg-desc" id="egg-desc-1">預留說明</div>
+                    </div>
+                    <div class="row-small-1">
+                        <div class="egg-desc" id="egg-desc-2">預留說明</div>
+                        <div class="egg-box" style="flex: 1; height: 100%;"><img id="egg-img-2" src=""></div>
+                    </div>
+                    <div class="row-small-2">
+                        <div class="egg-box" style="flex: 0.8; height: 100%;"><img id="egg-img-3" src=""></div>
+                        <div class="egg-desc" id="egg-desc-3" style="text-align: left;">預留說明</div>
+                    </div>
+                </div>
                 <div class="pagination-container">
                     <div class="controls-row">
                         <div class="nav-btn btn-left" onclick="changePage(-1)"></div>
                         <div class="dot-wrapper" id="dot-wrapper"></div>
                         <div class="nav-btn btn-right" onclick="changePage(1)"></div>
                     </div>
-                    <div class="page-content" id="page-content">自自自自自自自自</div>
+                    <div class="page-content" id="page-content">...</div>
                 </div>
             </div>
         </div>
@@ -231,11 +225,11 @@
         let currentPage = 0;
         const totalPages = 10;
         
-        // 💡 恢復把拔的「自自自」風格，並加入三個方塊的描述資料
+        // 🚀 把拔，這裡就是你要預留填空的所有頁面，資料完全補齊了！
         const pageData = [
             { text: "第一頁：自自自自自自自自", eggImgs: ["","",""], eggDescs: ["大塊的描述在此","細節 A","細節 B"] },
             { text: "第二頁：自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["這頁的主線索","細節 C","細節 D"] },
-            { text: "第三頁：自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["這裡放文字...","...","..."] },
+            { text: "第三頁：自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
             { text: "第四頁：自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
             { text: "第五頁：自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
             { text: "第六頁：自自自自自自自自自自自自自", eggImgs: ["","",""], eggDescs: ["...","...","..."] },
@@ -274,8 +268,13 @@
             for(let i=1; i<=3; i++) {
                 const imgEl = document.getElementById(`egg-img-${i}`);
                 const descEl = document.getElementById(`egg-desc-${i}`);
-                // 確保圖片在沒網址時顯示黑色
-                imgEl.src = data.eggImgs[i-1] || "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                const boxEl = imgEl.parentElement;
+                
+                const hasImg = data.eggImgs[i-1] && data.eggImgs[i-1] !== "";
+                imgEl.src = hasImg ? data.eggImgs[i-1] : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                
+                // 核心：當沒有圖片時，將整個方塊設為 50% 透明，透出報紙背景
+                boxEl.style.opacity = hasImg ? "1" : "0.7";
                 descEl.innerText = data.eggDescs[i-1];
             }
 
@@ -310,14 +309,11 @@
             setTimeout(() => { overlay.style.display = 'none'; }, 400);
         }
 
-        // 滑動翻頁
         let touchStartX = 0;
-        let touchEndX = 0;
         const newspaperUI = document.getElementById('newspaper-extras');
-
         newspaperUI.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
         newspaperUI.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
+            let touchEndX = e.changedTouches[0].screenX;
             if (touchEndX < touchStartX - 50) changePage(1);
             if (touchEndX > touchStartX + 50) changePage(-1);
         }, false);
