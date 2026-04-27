@@ -7,7 +7,18 @@
     <link rel="icon" href="../image/GUIXIN.webp" type="image/webp">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; display: flex; flex-direction: column; overflow: hidden; font-family: "Noto Sans TC", sans-serif; }
-        .header-bar { position: fixed; top: 0; left: 0; width: 100%; padding: 1.2rem 5%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(50px); -webkit-backdrop-filter: blur(50px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 2000; }
+    .header-bar {
+    position: fixed; top: 0; left: 0; width: 100%;
+    padding: 1.2rem 5%;
+    /* 核心：背景色一定要有透明度 (0.7)，毛玻璃才透得過去 */
+    background: rgba(0, 0, 0, 0.7); 
+    /* 核心：這兩行是靈魂 */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex; justify-content: space-between; align-items: center;
+    box-sizing: border-box; z-index: 2000;
+}
         .header-bar a { color: rgba(255, 255, 255, 0.9); text-decoration: none; font-size: 0.9rem; letter-spacing: 0.2em; }
         .scene-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; width: 100%; height: 100vh; }
         .scene-container { position: relative; width: 100vw; height: 56.25vw; max-height: 100vh; max-width: 177.78vh; }
