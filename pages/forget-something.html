@@ -23,9 +23,12 @@
         .newspaper-ui { position: absolute; display: none; width: 64%; height: 75%; top: 16.5%; left: 18%; background: transparent; z-index: 3010; touch-action: pan-y; filter: sepia(0.4) saturate(0.7) brightness(0.8) contrast(0.9); }
         .egg-layout { position: relative; width: 100%; height: 100%; }
         .egg-group { position: absolute; display: flex; flex-direction: column; gap: 8px; z-index: 3020; }
-        #group-1 { top: 3%; left: -1%; width: 50%; height: 23%; } #egg-desc-1 { position: absolute; top: 5%; left: 107%; width: 116px; }
-        #group-2 { top: 28%; left: 50%; width: 48%; height: 30%; } #egg-desc-2 { position: absolute; top: 107%; left: 7%; width: 100px; }
-        #group-3 { top: 28%; left: -5%; width: 50%; height: 20%; } #egg-desc-3 { position: absolute; top: 109%; left: 13%; width: 60%; }
+        #group-1 { top: 3%; left: -1%; width: 50%; height: 23%; } 
+        #egg-desc-1 { position: absolute; top: 5%; left: 107%; width: 116px; height: 60px; }
+        #group-2 { top: 28%; left: 50%; width: 48%; height: 30%; } 
+        #egg-desc-2 { position: absolute; top: 107%; left: 7%; width: 100px; height: 45px; }
+        #group-3 { top: 28%; left: -5%; width: 50%; height: 20%; } 
+        #egg-desc-3 { position: absolute; top: 109%; left: 13%; width: 60%; height: 85px; }
         .egg-box { width: 100%; height: 100%; background: #000; border-radius: 4px; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.5); transition: opacity 0.3s; }
         .egg-box img { width: 100%; height: 100%; object-fit: cover; }
         .egg-desc { position: absolute; padding: 8px; color: #f0eada; background: rgba(20, 15, 10, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); font-size: 0.8rem; border-radius: 4px; }
@@ -73,10 +76,7 @@
         </div>
     </div>
     <script>
-        const assets = {
-            turtle: '../image/end3/turtle-shell.webp', news: '../image/newspaper.webp',
-            mirror: '../image/end2/mirror.webp', lcd: '../image/end1/lcd-monitor.webp', phone: '../image/phone.webp'
-        };
+        const assets = { turtle: '../image/end3/turtle-shell.webp', news: '../image/newspaper.webp', mirror: '../image/end2/mirror.webp', lcd: '../image/end1/lcd-monitor.webp', phone: '../image/phone.webp' };
         let currentPage = 0; const totalPages = 10;
         const pageData = [
             { text: "第一頁：自自自自自自自自", eggImgs: ["","",""], eggDescs: ["大塊的標題","右邊的標題","左邊的標題"] },
@@ -114,7 +114,7 @@
         function renderPage() {
             const d = pageData[currentPage]; document.getElementById('page-content').innerText = d.text;
             for(let i=1; i<=3; i++) {
-                const img = document.getElementById(`egg-img-${i}`), desc = document.getElementById(`egg-desc-${i}`), has = d.eggImgs[i-1] !== "";
+                const img = document.getElementById(`egg-img-${i}`), desc = document.getElementById(`egg-desc-${i}`), has = d.eggImgs[i-1] && d.eggImgs[i-1] !== "";
                 img.src = has ? d.eggImgs[i-1] : "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
                 img.parentElement.style.opacity = has ? "1" : "0.7"; desc.innerText = d.eggDescs[i-1];
             }
