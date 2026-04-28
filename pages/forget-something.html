@@ -8,7 +8,7 @@
     <style>
     
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; display: flex; flex-direction: column; overflow: hidden; font-family: "Noto Sans TC", sans-serif; }
-        .full-width-detail { width: 100vw ; height: auto ; max-height: 90vh; object-fit: contain; }
+        
         .header-bar {
     position: fixed; 
     top: 0; 
@@ -30,8 +30,10 @@
 }
         .header-bar a { color: rgba(255, 255, 255, 0.9); text-decoration: none; font-size: 0.9rem; letter-spacing: 0.2em; }
         .scene-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; width: 100%; height: 100vh; }
-        .scene-container { position: relative; width: 100vw; height: 100vw; overflow: hidden; }
-        .scene-img { width: 100%; height: 100%; object-fit: cover; }
+        .scene-container { position: relative; width: 100vw; height: 56.25vw; max-height: 100vh; max-width: 177.78vh; margin: 0 auto; }
+        .scene-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .full-width-detail { width: 100vw ; height: auto ; max-height: 90vh; object-fit: contain; }
+        .full-width-lcd { width: 100vw ; height: auto ; max-height: 90vh; object-fit: contain; }
         .hotspot { position: absolute; cursor: pointer; border-radius: 50%; background: radial-gradient(circle, rgba(245, 240, 225, 0.3) 0%, rgba(200, 190, 170, 0.08) 100%); transition: all 0.3s ease; filter: blur(6px); transform: translate(-50%, -50%); z-index: 500; opacity: 0.2; animation: pulse 3s infinite ease-in-out; }
         
         /* --- 座標微調區：把拔你表演 F12 的舞台 --- */
