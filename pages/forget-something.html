@@ -43,6 +43,10 @@
         #mirror { width: 11%; height: 26%; left: 32%; top: 56.5%; }
         #lcd-monitor { width: 10%; height: 15%; left: 84.5%; top: 61.5%; }
         #phone-screen { width: 5%; height: 8%; left: 92.5%; top: 66%; }
+        
+        /* -------------------------------------------------- */
+        /* 手機版與電腦版切換區塊 (Mobile / Desktop Queries) */
+        /* -------------------------------------------------- */
         @media (max-aspect-ratio: 1/1) {
             .scene-container { width: 100vw; height: 177.78vw; }
             #turtle-shell { width: 20%; height: 10%; left: 13%; top: 74%; }
@@ -82,19 +86,19 @@
         .egg-box { width: 100%; height: 100%; background: #000; border-radius: 4px; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
         .egg-box img { width: 100%; height: 100%; object-fit: cover; }
         .egg-desc { 
-    position: absolute; 
-    padding: 8px; 
-    color: #f0eada; 
-    background: rgba(0, 0, 0, 0.7); /* 加深一點 */
-    backdrop-filter: blur(5px); 
-    border: 1px solid rgba(222, 255, 154, 0.3); 
-    font-size: 0.85rem; 
-    border-radius: 4px;
-    white-space: normal;      /* 允許正常換行 */
-    word-wrap: break-word;    /* 長單字強制斷行 */
-    overflow-wrap: anywhere;  /* 確保內容不超出 */
-    line-height: 1.4;         /* 稍微增加行高，閱讀比較舒服 */
-}
+            position: absolute; 
+            padding: 8px; 
+            color: #f0eada; 
+            background: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(5px); 
+            border: 1px solid rgba(222, 255, 154, 0.3); 
+            font-size: 0.85rem; 
+            border-radius: 4px;
+            white-space: normal;      
+            word-wrap: break-word;    
+            overflow-wrap: anywhere;  
+            line-height: 1.4;         
+        }
         .pagination-container { position: absolute; left: 50%; transform: translateX(-50%); width: 85%; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
         .controls-row { width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: auto; }
         .nav-btn { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; cursor: pointer; opacity: 0.8; }
@@ -104,7 +108,7 @@
         .dot.active { background: #f0eada; box-shadow: 0 0 12px #f0eada; border: none; }
         .page-content { color: #f0eada; text-align: center; font-size: 1rem; font-weight: bold; height: 2.8em; display: flex; align-items: center; justify-content: center; margin-top: 8px; width: 100%; text-shadow: 0px 0px 10px rgba(0,0,0,0.8); }
         .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 3100; }
-    /* 以上定位座標勿動 */
+        /* 以上定位座標勿動 */
     </style>
 </head>
 <body>
@@ -187,9 +191,17 @@
     <script type="module">
         import { NEWSPAPER_DATA } from '../data/newspaper_data.js';
 
-        const assets = { turtle: '../image/end3/turtle-shell.webp', news: '../image/newspaper.webp', mirror: '../image/end2/mirror.webp', lcd: '../image/end1/lcd-monitor.webp', phone: '../image/phone.webp' };
-        let currentPage = 0; const totalPages = 10;
-        const SECRET_ID = "GX9527"; const SECRET_KEY = "HOME666";
+        const assets = { 
+            turtle: '../image/end3/turtle-shell.webp', 
+            news: '../image/newspaper.webp', 
+            mirror: '../image/end2/mirror.webp', 
+            lcd: '../image/end1/lcd-monitor.webp', 
+            phone: '../image/phone.webp' 
+        };
+        let currentPage = 0; 
+        const totalPages = 10;
+        const SECRET_ID = "GX9527"; 
+        const SECRET_KEY = "HOME666";
         
         // 使用引入的資料
         const pageData = NEWSPAPER_DATA;
@@ -203,37 +215,58 @@
         const dotWrapper = document.getElementById('dot-wrapper');
 
         // --- 拖曳邏輯區 ---
-        let activeWin = null; let offset = { x: 0, y: 0 };
+        let activeWin = null; 
+        let offset = { x: 0, y: 0 };
+        let isDraggableInitialized = false;
+
         function initDraggable() {
+            if (isDraggableInitialized) return; // 拉姆防止重複掛載事件
+            
             document.querySelectorAll('.win-header').forEach(header => {
-                header.onmousedown = (e) => startDrag(e, e.clientX, e.clientY);
-                header.ontouchstart = (e) => startDrag(e, e.touches[0].clientX, e.touches[0].clientY);
+                header.addEventListener('mousedown', (e) => startDrag(e, e.clientX, e.clientY));
+                header.addEventListener('touchstart', (e) => startDrag(e, e.touches[0].clientX, e.touches[0].clientY), { passive: false });
             });
+            isDraggableInitialized = true;
         }
+
         function startDrag(e, x, y) {
             activeWin = e.currentTarget.parentElement;
             document.querySelectorAll('.win-box').forEach(w => w.style.zIndex = "3100");
             activeWin.style.zIndex = "3200";
             offset.x = x - activeWin.offsetLeft;
             offset.y = y - activeWin.offsetTop;
+
             if (e.type === 'mousedown') {
                 document.onmousemove = (ev) => dragMove(ev.clientX, ev.clientY);
                 document.onmouseup = stopDrag;
             } else {
-                document.ontouchmove = (ev) => dragMove(ev.touches[0].clientX, ev.touches[0].clientY);
+                document.ontouchmove = (ev) => {
+                    ev.preventDefault(); // 避免手機端拖動時頁面捲動
+                    dragMove(ev.touches[0].clientX, ev.touches[0].clientY);
+                };
                 document.ontouchend = stopDrag;
             }
         }
+
         function dragMove(x, y) {
             if (!activeWin) return;
-            let newX = x - offset.x; let newY = y - offset.y;
+            let newX = x - offset.x; 
+            let newY = y - offset.y;
             const maxX = window.innerWidth - activeWin.offsetWidth;
             const maxY = window.innerHeight - activeWin.offsetHeight;
+            
             activeWin.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
             activeWin.style.top = Math.max(0, Math.min(newY, maxY)) + 'px';
             activeWin.style.transform = 'none';
         }
-        function stopDrag() { activeWin = null; document.onmousemove = null; document.onmouseup = null; document.ontouchmove = null; document.ontouchend = null; }
+
+        function stopDrag() { 
+            activeWin = null; 
+            document.onmousemove = null; 
+            document.onmouseup = null; 
+            document.ontouchmove = null; 
+            document.ontouchend = null; 
+        }
 
         // --- 函數掛載區：讓 HTML 點得到 ---
         window.checkLogin = function() {
@@ -248,54 +281,139 @@
                 errorMsg.style.opacity = '1';
                 const body = document.getElementById('mail-body');
                 body.style.background = 'rgba(255, 0, 0, 0.1)';
-                setTimeout(() => { body.style.background = 'transparent'; errorMsg.style.opacity = '0'; }, 500);
+                setTimeout(() => { 
+                    body.style.background = 'transparent'; 
+                    errorMsg.style.opacity = '0'; 
+                }, 800); // 稍微拉長一點點提示時間
             }
         };
 
-        window.openTurtle = function() { hideAllExtras(); turtlePz.style.display = 'grid'; showOverlay(assets.turtle, 'img-portrait', 'turtle'); };
-        window.openNewspaper = function() { hideAllExtras(); newsEx.style.display = 'block'; initDots(); renderPage(); showOverlay(assets.news, 'img-portrait', 'news'); };
-        window.openMirror = function() { hideAllExtras(); showOverlay(assets.mirror, 'img-portrait', 'mirror'); };
-        window.openLCD = function() { hideAllExtras(); showOverlay(assets.lcd, 'img-lcd-special', 'lcd'); };
-        window.openPhone = function() { hideAllExtras(); showOverlay(assets.phone, 'img-portrait', 'phone'); };
+        window.openTurtle = function() { 
+            hideAllExtras(); 
+            turtlePz.style.display = 'grid'; 
+            showOverlay(assets.turtle, 'img-portrait', 'turtle'); 
+        };
 
-        window.toggleWin = function(id) { const w = document.getElementById(id); if (!w) return; w.classList.remove('minimized'); w.style.display = (w.style.display === 'flex') ? 'none' : 'flex'; };
-        window.minWin = function(id) { const w = document.getElementById(id); w.classList.toggle('minimized'); event.stopPropagation(); };
-        window.closeDetail = function() { overlay.classList.remove('show'); setTimeout(() => { overlay.style.display = 'none'; hideAllExtras(); }, 400); };
-        window.changePage = function(s) { currentPage = (currentPage + s + totalPages) % totalPages; renderPage(); };
+        window.openNewspaper = function() { 
+            hideAllExtras(); 
+            newsEx.style.display = 'block'; 
+            initDots(); 
+            renderPage(); 
+            showOverlay(assets.news, 'img-portrait', 'news'); 
+        };
+
+        window.openMirror = function() { 
+            hideAllExtras(); 
+            showOverlay(assets.mirror, 'img-portrait', 'mirror'); 
+        };
+
+        window.openLCD = function() { 
+            hideAllExtras(); 
+            showOverlay(assets.lcd, 'img-lcd-special', 'lcd'); 
+        };
+
+        window.openPhone = function() { 
+            hideAllExtras(); 
+            showOverlay(assets.phone, 'img-portrait', 'phone'); 
+        };
+
+        window.toggleWin = function(id) { 
+            const w = document.getElementById(id); 
+            if (!w) return; 
+            w.classList.remove('minimized'); 
+            w.style.display = (w.style.display === 'flex') ? 'none' : 'flex'; 
+        };
+
+        window.minWin = function(id) { 
+            const w = document.getElementById(id); 
+            w.classList.toggle('minimized'); 
+            event.stopPropagation(); 
+        };
+
+        window.closeDetail = function() { 
+            overlay.classList.remove('show'); 
+            setTimeout(() => { 
+                overlay.style.display = 'none'; 
+                hideAllExtras(); 
+            }, 400); 
+        };
+
+        window.changePage = function(s) { 
+            currentPage = (currentPage + s + totalPages) % totalPages; 
+            renderPage(); 
+        };
 
         // --- 內部輔助函數 ---
-        function hideAllExtras() { newsEx.style.display = 'none'; turtlePz.style.display = 'none'; lcdUI.style.display = 'none'; detImg.className = ''; detImg.removeAttribute('data-active-type'); }
-        function showOverlay(src, styleClass, typeName) {
-            detImg.src = src; detImg.className = styleClass;
-            detImg.setAttribute('data-active-type', typeName);
-            overlay.style.display = 'flex'; setTimeout(() => overlay.classList.add('show'), 10);
-            if(typeName === 'lcd') { lcdUI.style.display = 'block'; initDraggable(); }
+        function hideAllExtras() { 
+            newsEx.style.display = 'none'; 
+            turtlePz.style.display = 'none'; 
+            lcdUI.style.display = 'none'; 
+            detImg.className = ''; 
+            detImg.removeAttribute('data-active-type'); 
         }
+
+        function showOverlay(src, styleClass, typeName) {
+            detImg.src = src; 
+            detImg.className = styleClass;
+            detImg.setAttribute('data-active-type', typeName);
+            overlay.style.display = 'flex'; 
+            setTimeout(() => overlay.classList.add('show'), 10);
+            
+            if(typeName === 'lcd') { 
+                lcdUI.style.display = 'block'; 
+                initDraggable(); 
+            }
+        }
+
         function initDots() {
             dotWrapper.innerHTML = '';
             for (let i = 0; i < totalPages; i++) {
                 const d = document.createElement('div');
                 d.className = 'dot' + (i === currentPage ? ' active' : '');
-                d.onclick = (e) => { e.stopPropagation(); currentPage = i; renderPage(); };
+                d.onclick = (e) => { 
+                    e.stopPropagation(); 
+                    currentPage = i; 
+                    renderPage(); 
+                };
                 dotWrapper.appendChild(d);
             }
         }
+
         function renderPage() {
-            const data = pageData[currentPage]; pageContent.innerText = data.text;
+            const data = pageData[currentPage]; 
+            if (!data) return; // 拉姆的安全檢查
+
+            pageContent.innerText = data.text || "";
             for(let i=1; i<=3; i++) {
-                const img = document.getElementById(`egg-img-${i}`); const desc = document.getElementById(`egg-desc-${i}`);
-                img.src = data.eggImg || assets.news; desc.innerText = data.eggDescs[i-1];
+                const img = document.getElementById(`egg-img-${i}`); 
+                const desc = document.getElementById(`egg-desc-${i}`);
+                if (img) img.src = data.eggImg || assets.news; 
+                if (desc) desc.innerText = (data.eggDescs && data.eggDescs[i-1]) ? data.eggDescs[i-1] : "";
             }
             const dots = dotWrapper.querySelectorAll('.dot');
             dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentPage));
         }
+
         function updateScene() {
+            // 與 CSS 的比例判斷保持一致性
             const isPortrait = window.innerHeight > window.innerWidth;
-            document.getElementById('main-scene').src = isPortrait ? "../image/forget-something-m.webp" : "../image/forget-something.webp";
+            const mainImg = document.getElementById('main-scene');
+            if (mainImg) {
+                mainImg.src = isPortrait ? "../image/forget-something-m.webp" : "../image/forget-something.webp";
+            }
         }
 
-        window.addEventListener('resize', updateScene); updateScene();
-        for (let i = 0; i < 81; i++) { const cell = document.createElement('div'); cell.className = 'puzzle-cell'; turtlePz.appendChild(cell); }
+        /* 預留：將來若有其他初始化邏輯請寫在此處 */
+
+        window.addEventListener('resize', updateScene); 
+        updateScene();
+
+        // 拼圖格子初始化
+        for (let i = 0; i < 81; i++) { 
+            const cell = document.createElement('div'); 
+            cell.className = 'puzzle-cell'; 
+            turtlePz.appendChild(cell); 
+        }
     </script>
 </body>
 </html>
