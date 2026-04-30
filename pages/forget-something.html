@@ -41,8 +41,12 @@
            ============================================================ */
         .lcd-desktop { position: absolute; display: none; width: 47vw; height: 31vw; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 3050; pointer-events: auto; user-select: none; -webkit-user-select: none; }
         .icon-bar { position: absolute; bottom: 12%; right: 2%; width: 39%; height: 8%; display: flex; justify-content: space-evenly; transform: translateY(24px); }
-        .lcd-icon { width: 14%; height: 100%; cursor: pointer; background: transparent; }
+        .lcd-icon { position: relative; width: 14%; height: 100%; cursor: pointer; background: transparent; }
         
+        /* 郵件呼吸燈紅點 */
+        .unread-badge { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background-color: #ff4444; border-radius: 50%; display: block; box-shadow: 0 0 5px #ff4444; animation: badge-pulse 2s infinite ease-in-out; pointer-events: none; }
+        @keyframes badge-pulse { 0%, 100% { opacity: 0.4; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
+
         .win-box { position: absolute; width: 70%; background: rgba(25, 25, 25, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; display: none; flex-direction: column; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8); overflow: hidden; z-index: 3100; touch-action: none; }
         .win-header { background: rgba(255, 255, 255, 0.05); padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; color: #deff9a; font-size: 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: move; touch-action: none; }
         .win-body { padding: 18px; color: #daffde; font-size: 0.9rem; line-height: 0.5; height: 160px; overflow-y: auto; user-select: text; -webkit-user-select: text; }
@@ -94,102 +98,96 @@
         .turtle-puzzle-ui { position: absolute; display: none; width: 110vw; height: 110vw; max-width: 55vh; max-height: 55vh; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr); gap: 4px; z-index: 3010; top: 50%; left: 50%; transform: translate(-50%, -50%); }
         .puzzle-cell { border: 1px solid rgba(240, 234, 218, 0.3); background: rgba(20, 15, 10, 0.4); }
 
-        /* ============================================================
+        /* ------------------------------------------------------------
            [8. RWD 區 - 偵測螢幕比例與手機版樣式] 
-           ============================================================ */
+           ------------------------------------------------------------ */
         @media (max-aspect-ratio: 1/1) {
-            .scene-container { width: 100vw; height: 177.78vw; }
-            #turtle-shell { width: 20%; height: 10%; left: 13%; top: 74%; }
-            #newspaper { width: 19%; height: 10%; left: 11%; top: 87%; }
-            #mirror { width: 22%; height: 12%; left: 35%; top: 72%; }
-            #lcd-monitor { width: 17%; height: 9%; left: 85%; top: 67%; }
-            #phone-screen { width: 7%; height: 4%; left: 76%; top: 73%; }
-            .newspaper-ui { width: 89% !important; height: 74% !important; left: 6% !important; top: 18% !important; }
-            #group-1 { top: 1% !important; left: -1% !important; width: 52% !important; height: 24% !important; }
-            #egg-desc-1 { top: 5% !important; left: 105% !important; width: 150px !important; height: 110px !important; }
-            #group-2 { top: 32% !important; left: 51% !important; width: 45% !important; height: 30% !important; }
-            #egg-desc-2 { top: 107% !important; left: 4% !important; width: 82% !important; height: 43% !important; }
-            #group-3 { top: 33% !important; left: -3% !important; width: 48% !important; height: 20% !important; }
-            #egg-desc-3 { top: 110% !important; left: 1% !important; width: 80% !important; height: 80% !important; }
-            .lcd-desktop { width: 90vw !important; height: 60vw !important; top: 45% !important; }
-            .lcd-desktop .icon-bar { bottom: 6% !important; width: 40% !important; right: 1% !important; transform: translateY(0) !important; }
-            .power-led { right: 0.7% !important; bottom: -6.2% !important; }
-            .img-lcd-special { width: 100vw !important; height: 92vw !important; object-position: center 40% !important; }
+             .scene-container { width: 100vw; height: 177.78vw; }
+             #turtle-shell { width: 20%; height: 10%; left: 13%; top: 74%; }
+             #newspaper { width: 19%; height: 10%; left: 11%; top: 87%; }
+             #mirror { width: 22%; height: 12%; left: 35%; top: 72%; }
+             #lcd-monitor { width: 17%; height: 9%; left: 85%; top: 67%; }
+             #phone-screen { width: 7%; height: 4%; left: 76%; top: 73%; }
+             .newspaper-ui { width: 89% !important; height: 74% !important; left: 6% !important; top: 18% !important; }
+             #group-1 { top: 1% !important; left: -1% !important; width: 52% !important; height: 24% !important; }
+             #egg-desc-1 { top: 5% !important; left: 105% !important; width: 150px !important; height: 110px !important; }
+             #group-2 { top: 32% !important; left: 51% !important; width: 45% !important; height: 30% !important; }
+             #egg-desc-2 { top: 107% !important; left: 4% !important; width: 82% !important; height: 43% !important; }
+             #group-3 { top: 33% !important; left: -3% !important; width: 48% !important; height: 20% !important; }
+             #egg-desc-3 { top: 110% !important; left: 1% !important; width: 80% !important; height: 80% !important; }
+             .lcd-desktop { width: 90vw !important; height: 60vw !important; top: 45% !important; }
+             .lcd-desktop .icon-bar { bottom: 6% !important; width: 40% !important; right: 1% !important; transform: translateY(0) !important; }
+             .power-led { right: 0.7% !important; bottom: -6.2% !important; }
+             .img-lcd-special { width: 100vw !important; height: 92vw !important; object-position: center 40% !important; }
         }
     </style>
 </head>
 <body>
-    <!-- [導覽列] -->
     <nav class="header-bar">
         <a href="forget-something.html">歸心物流 | 失物招領處</a>
         <a href="../index.html" style="font-size: 0.75rem; color: #aaa;">回到首頁</a>
     </nav>
 
-    <!-- [主場景區] -->
     <div class="scene-wrapper">
         <div class="scene-container">
             <img id="main-scene" src="" class="scene-img">
-            <!-- 熱點區 -->
             <div class="hotspot" id="turtle-shell" onclick="openTurtle()"></div>
             <div class="hotspot" id="newspaper" onclick="openNewspaper()"></div>
             <div class="hotspot" id="mirror" onclick="openMirror()"></div>
             <div class="hotspot" id="lcd-monitor" onclick="openLCD()"></div>
             <div class="hotspot" id="phone-screen" onclick="openPhone()"></div>
-        </div> <!-- END scene-container -->
-    </div> <!-- END scene-wrapper -->
-
-    <!-- [詳情彈窗層] -->
-    <div class="overlay" id="detail-overlay" onclick="closeDetail()">
+        </div> </div> <div class="overlay" id="detail-overlay" onclick="closeDetail()">
         <div class="close-btn" onclick="closeDetail()">&times;</div>
         <div class="detail-view" onclick="event.stopPropagation()">
             <img id="detail-img" src="">
             
-            <!-- LCD 系統 UI -->
             <div id="lcd-ui" class="lcd-desktop">
-                <div class="power-led"></div>
+                <div class="power-led" style="display: none;"></div>
                 <div class="icon-bar">
-                    <div class="lcd-icon" onclick="toggleWin('win-mail')"></div>
+                    <div class="lcd-icon" onclick="toggleWin('win-mail')">
+                        <div id="mail-notification" class="unread-badge" style="display: none;"></div>
+                    </div>
                     <div class="lcd-icon" onclick="toggleWin('win-browser')"></div>
                     <div class="lcd-icon" onclick="toggleWin('win-file')"></div>
                     <div class="lcd-icon" onclick="toggleWin('win-truck')"></div>
                     <div class="lcd-icon" onclick="toggleWin('win-setting')"></div>
                 </div>
 
-                <!-- 郵件視窗 -->
                 <div id="win-mail" class="win-box" style="top:5%; left:5%;">
                     <div class="win-header">
                         <span id="mail-win-title">系統郵件 - 鎖定中</span>
                         <div class="win-btns"><span onclick="toggleWin('win-mail')">×</span></div>
                     </div>
                     <div class="win-body">
+                        <!-- 登入介面 -->
                         <div id="login-view" class="login-container">
                             <div style="font-size: 1rem; opacity: 0.7;">歸心物流信件匣</div>
-                            <input type="text" id="user-id" class="login-input" placeholder="User ID">
-                            <input type="password" id="user-pass" class="login-input" placeholder="Access Key">
+                            <input type="text" id="user-id" class="login-input" placeholder="User ID" autocomplete="off">
+                            <input type="password" id="user-pass" class="login-input" placeholder="Access Key" autocomplete="off">
                             <button class="login-btn" onclick="checkLogin()">登入</button>
                         </div>
+                        <!-- 郵件清單頁面 -->
                         <div id="mail-list-view" class="mail-list">
                             <div class="mail-toolbar">
                                 <span id="user-display-name" style="font-size:1rem; color:#deff9a">User</span>
                                 <div class="logout-btn" onclick="logoutMail()">[登出]</div>
                             </div>
-                            <div id="mail-items-container"></div>
+                            <div id="mail-items-container">
+                                <!-- 腳本會在此處動態渲染 mail-item -->
+                            </div>
                         </div>
+                        <!-- 郵件內容頁面 -->
                         <div id="mail-content-view" class="mail-content-view">
                             <div class="back-btn" onclick="backToMailList()">← 返回</div>
+                            <div id="mail-detail-sender" style="font-size: 0.75rem; color: #deff9a; opacity: 0.8; margin-bottom: 5px;"></div>
                             <div id="mail-detail-text" style="border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; font-size: 0.8rem; line-height: 1.6; white-space: pre-wrap; color: #daffde;"></div>
                         </div>
                     </div>
-                </div> <!-- END win-mail -->
-
-                <div id="win-browser" class="win-box" style="top:10%; left:10%;"><div class="win-header"><span>瀏覽器</span><div class="win-btns"><span onclick="toggleWin('win-browser')">×</span></div></div><div class="win-body">正在連線內部論壇...</div></div>
+                </div> <div id="win-browser" class="win-box" style="top:10%; left:10%;"><div class="win-header"><span>瀏覽器</span><div class="win-btns"><span onclick="toggleWin('win-browser')">×</span></div></div><div class="win-body">正在連線內部論壇...</div></div>
                 <div id="win-file" class="win-box" style="top:15%; left:15%;"><div class="win-header"><span>檔案</span><div class="win-btns"><span onclick="toggleWin('win-file')">×</span></div></div><div class="win-body">員工守冊.pdf (權限不足)</div></div>
                 <div id="win-truck" class="win-box" style="top:20%; left:20%;"><div class="win-header"><span>物流追蹤</span><div class="win-btns"><span onclick="toggleWin('win-truck')">×</span></div></div><div class="win-body">GX-9527：配送異常</div></div>
                 <div id="win-setting" class="win-box" style="top:25%; left:25%;"><div class="win-header"><span>系統</span><div class="win-btns"><span onclick="toggleWin('win-setting')">×</span></div></div><div class="win-body">系統版本：v10.4.2</div></div>
-            </div> <!-- END lcd-ui -->
-
-            <!-- 報紙細節 UI -->
-            <div id="newspaper-extras" class="newspaper-ui">
+            </div> <div id="newspaper-extras" class="newspaper-ui">
                 <div class="egg-layout">
                     <div class="egg-group" id="group-1"><div class="egg-box"><img id="egg-img-1" src=""></div><div class="egg-desc" id="egg-desc-1"></div></div>
                     <div class="egg-group" id="group-2"><div class="egg-box"><img id="egg-img-2" src=""></div><div class="egg-desc" id="egg-desc-2"></div></div>
@@ -199,16 +197,10 @@
                     <div class="controls-row"><div class="nav-btn btn-left" onclick="changePage(-1)"></div><div class="dot-wrapper" id="dot-wrapper"></div><div class="nav-btn btn-right" onclick="changePage(1)"></div></div>
                     <div class="page-content" id="page-content">...</div>
                 </div>
-            </div> <!-- END newspaper-extras -->
-
-            <!-- 拼圖容器 -->
-            <div id="turtle-puzzle" class="turtle-puzzle-ui"></div>
-        </div> <!-- END detail-view -->
-    </div> <!-- END overlay -->
-
-    <script type="module">
+            </div> <div id="turtle-puzzle" class="turtle-puzzle-ui"></div>
+        </div> </div> <script type="module">
         /* ============================================================
-           [資料與模組載入] 
+           [1. 資料與模組載入] 
            ============================================================ */
         import { NEWSPAPER_DATA } from '../data/newspaper_data.js';
         import { MAIL_DATABASE } from '../data/mail_data.js';
@@ -219,13 +211,30 @@
         let currentUserMails = [];
         
         /* ============================================================
-           [已讀記憶系統] 
+           [2. 已讀記憶系統] 
            ============================================================ */
         let readMails = new Set(JSON.parse(localStorage.getItem('readMails') || '[]'));
 
         /* ============================================================
-           [郵件系統邏輯] 
+           [3. 郵件系統邏輯] 
            ============================================================ */
+        // 修改：新增狀態判斷函式，用於控制 LED 與 紅點
+        function updateLEDStatus() {
+            const mailBadge = document.getElementById('mail-notification');
+            const powerLed = document.querySelector('.power-led');
+            
+            // 修改：僅針對已解鎖且未讀的信件進行判斷
+            const hasUnread = currentUserMails.some(mail => mail.unlocked && !readMails.has(mail.id));
+            
+            if (hasUnread) {
+                if (mailBadge) mailBadge.style.display = 'block';
+                if (powerLed) powerLed.style.display = 'block';
+            } else {
+                if (mailBadge) mailBadge.style.display = 'none';
+                if (powerLed) powerLed.style.display = 'none';
+            }
+        }
+
         window.checkLogin = function() {
             const userId = document.getElementById('user-id').value.trim();
             const pass = document.getElementById('user-pass').value.trim();
@@ -235,8 +244,14 @@
                 document.getElementById('user-display-name').innerText = userData.userName;
                 document.getElementById('mail-win-title').innerText = "系統郵件 - " + userData.userName;
                 renderMailList();
+
+                // 修正：登入後立即判斷是否顯示 LED 與 紅點
+                updateLEDStatus();
+
                 document.getElementById('login-view').style.display = 'none';
                 document.getElementById('mail-list-view').style.display = 'flex';
+                
+                /* 預留 */
             } else {
                 alert("存取拒絕：無效的員工 ID 或 Access Key。");
             }
@@ -257,7 +272,7 @@
             const isContentView = document.getElementById('mail-content-view').style.display === 'block';
 
             if (e.key === 'Backspace' && !isEditing && isContentView) {
-                e.preventDefault(); // 防止瀏覽器預設的後退行為
+                e.preventDefault(); 
                 backToMailList();
             }
         });
@@ -265,7 +280,11 @@
         function renderMailList() {
             const container = document.getElementById('mail-items-container');
             container.innerHTML = '';
-            currentUserMails.forEach(mail => {
+            
+            // 修改：過濾掉未解鎖的信件
+            const visibleMails = currentUserMails.filter(mail => mail.unlocked);
+
+            visibleMails.forEach(mail => {
                 const item = document.createElement('div');
                 item.className = 'mail-item';
                 
@@ -285,6 +304,9 @@
                     localStorage.setItem('readMails', JSON.stringify(Array.from(readMails)));
                     readMail(mail);
                     renderMailList();
+                    
+                    // 修正：讀取郵件後即時更新 LED 狀態
+                    updateLEDStatus();
                 };
                 container.appendChild(item);
             });
@@ -294,6 +316,9 @@
             document.getElementById('mail-list-view').style.display = 'none';
             document.getElementById('mail-content-view').style.display = 'block';
             document.getElementById('mail-detail-text').innerText = mail.content;
+            if(mail.sender) {
+                document.getElementById('mail-detail-sender').innerText = "寄件者: " + mail.sender;
+            }
         };
 
         window.logoutMail = function() {
@@ -303,6 +328,10 @@
             document.getElementById('user-id').value = '';
             document.getElementById('user-pass').value = '';
             document.getElementById('mail-win-title').innerText = "系統郵件 - 鎖定中";
+
+            // 修正：登出後立即隱藏 LED 與 紅點
+            document.getElementById('mail-notification').style.display = 'none';
+            document.querySelector('.power-led').style.display = 'none';
         };
 
         window.backToMailList = () => {
@@ -311,17 +340,67 @@
         };
 
         /* ============================================================
-           [視窗切換與 UI 控制] 
+           [4. 視窗切換與 UI 控制] 
            ============================================================ */
-        function hideAll() { newsEx.style.display='none'; turtlePz.style.display='none'; lcdUI.style.display='none'; detImg.className=''; }
-        window.openTurtle = () => { hideAll(); turtlePz.style.display='grid'; initTurtle(); show('turtle', 'img-portrait'); };
-        window.openNewspaper = () => { hideAll(); newsEx.style.display='block'; initDots(); renderPage(); show('news', 'img-portrait'); };
-        window.openLCD = () => { hideAll(); lcdUI.style.display='block'; initDraggable(); show('lcd', 'img-lcd-special'); };
-        window.openMirror = () => { hideAll(); show('mirror', 'img-portrait'); };
-        window.openPhone = () => { hideAll(); show('phone', 'img-portrait'); };
-        function show(k, c) { detImg.src=assets[k]; detImg.className=c; overlay.style.display='flex'; setTimeout(()=>overlay.classList.add('show'),10); }
-        window.closeDetail = () => { overlay.classList.remove('show'); setTimeout(()=>{ overlay.style.display='none'; hideAll(); }, 400); };
-        function initTurtle() { turtlePz.innerHTML=''; for(let i=0;i<81;i++) turtlePz.appendChild(document.createElement('div')).className='puzzle-cell'; }
+        function hideAll() { 
+            newsEx.style.display='none'; 
+            turtlePz.style.display='none'; 
+            lcdUI.style.display='none'; 
+            detImg.className=''; 
+        }
+
+        window.openTurtle = () => { 
+            hideAll(); 
+            turtlePz.style.display='grid'; 
+            initTurtle(); 
+            show('turtle', 'img-portrait'); 
+        };
+
+        window.openNewspaper = () => { 
+            hideAll(); 
+            newsEx.style.display='block'; 
+            initDots(); 
+            renderPage(); 
+            show('news', 'img-portrait'); 
+        };
+
+        window.openLCD = () => { 
+            hideAll(); 
+            lcdUI.style.display='block'; 
+            initDraggable(); 
+            show('lcd', 'img-lcd-special'); 
+        };
+
+        window.openMirror = () => { 
+            hideAll(); 
+            show('mirror', 'img-portrait'); 
+        };
+
+        window.openPhone = () => { 
+            hideAll(); 
+            show('phone', 'img-portrait'); 
+        };
+
+        function show(k, c) { 
+            detImg.src=assets[k]; 
+            detImg.className=c; 
+            overlay.style.display='flex'; 
+            setTimeout(()=>overlay.classList.add('show'),10); 
+        }
+
+        window.closeDetail = () => { 
+            overlay.classList.remove('show'); 
+            setTimeout(()=>{ overlay.style.display='none'; hideAll(); }, 400); 
+        };
+
+        function initTurtle() { 
+            turtlePz.innerHTML=''; 
+            for(let i=0;i<81;i++) {
+                const cell = document.createElement('div');
+                cell.className='puzzle-cell';
+                turtlePz.appendChild(cell); 
+            }
+        }
         
         window.toggleWin = (id) => { 
             const w=document.getElementById(id); 
@@ -333,7 +412,7 @@
         };
 
         /* ============================================================
-           [視窗拖曳系統 - 支援手機觸控] 
+           [5. 視窗拖曳系統 - 支援手機觸控] 
            ============================================================ */
         let activeWin = null;
         let startX, startY, initialX, initialY;
@@ -379,14 +458,26 @@
         }
 
         /* ============================================================
-           [報紙分頁系統] 
+           [6. 報紙分頁系統] 
            ============================================================ */
         let curP=0;
         window.changePage=(s)=>{ curP=(curP+s+10)%10; renderPage(); };
         function initDots(){ const w=document.getElementById('dot-wrapper'); w.innerHTML=''; for(let i=0;i<10;i++){ const d=document.createElement('div'); d.className='dot'+(i===curP?' active':''); d.onclick=(e)=>{e.stopPropagation(); curP=i; renderPage();}; w.appendChild(d); } }
-        function renderPage(){ const d=NEWSPAPER_DATA[curP]; if(!d)return; document.getElementById('page-content').innerText=d.text||""; for(let i=1;i<=3;i++){ const im=document.getElementById(`egg-img-${i}`), ds=document.getElementById(`egg-desc-${i}`); if(im) im.src=d.eggImg||assets.news; if(ds) ds.innerText=(d.eggDescs && d.eggDescs[i-1])?d.eggDescs[i-1]:""; } document.querySelectorAll('.dot').forEach((dt,idx)=>dt.classList.toggle('active',idx===curP)); }
+        function renderPage(){ 
+            const d=NEWSPAPER_DATA[curP]; 
+            if(!d)return; 
+            document.getElementById('page-content').innerText=d.text||""; 
+            for(let i=1;i<=3;i++){ 
+                const im=document.getElementById(`egg-img-${i}`), ds=document.getElementById(`egg-desc-${i}`); 
+                if(im) im.src=d.eggImg||assets.news; 
+                if(ds) ds.innerText=(d.eggDescs && d.eggDescs[i-1])?d.eggDescs[i-1]:""; 
+            } 
+            document.querySelectorAll('.dot').forEach((dt,idx)=>dt.classList.toggle('active',idx===curP)); 
+        }
 
-        /* [自適應場景切換] */
+        /* ============================================================
+           [7. 自適應場景切換] 
+           ============================================================ */
         function updateScene() { document.getElementById('main-scene').src = (window.innerHeight>window.innerWidth) ? "../image/forget-something-m.webp" : "../image/forget-something.webp"; }
         window.addEventListener('resize', updateScene); updateScene();
     </script>

@@ -2,9 +2,9 @@ import { MAIL_DATABASE } from '../data/mail_data.js';
 
 // --- 全域變數（狀態紀錄） ---
 let currentUser = null;    // 紀錄當前登入的使用者資料物件
-let currentMails = [];     // 紀錄該使用者的郵件清單
+let currentMails = [];      // 紀錄該使用者的郵件清單
 
-// 從 localStorage 讀取已讀紀錄，使用 Set 方便查找與去重
+// 從 localStorage 讀取已讀紀錄
 let readMails = new Set(JSON.parse(localStorage.getItem('readMails') || '[]')); 
 
 export function initMailSystem() {
@@ -18,51 +18,53 @@ export function initMailSystem() {
 
 function refreshMailUI() {
     const loginView = document.getElementById('login-view');
-    const mailView = document.getElementById('mail-view');
-    const winTitle = document.querySelector('#win-mail .win-header span');
+    const mailListView = document.getElementById('mail-list-view'); // 對應 HTML 結構
+    const mailContentView = document.getElementById('mail-content-view');
+    const winTitle = document.getElementById('mail-win-title');
 
     if (currentUser) {
         loginView.style.display = 'none';
-        mailView.style.display = 'flex';
-        winTitle.innerText = `郵件系統 - ${currentUser.userName}`;
+        mailListView.style.display = 'flex';
+        mailContentView.style.display = 'none';
+        winTitle.innerText = `系統郵件 - ${currentUser.userName}`;
         renderMailList();
+        updateLEDStatus(); // 同步更新主頁面的 LED
     } else {
         loginView.style.display = 'flex';
-        mailView.style.display = 'none';
-        winTitle.innerText = `郵件系統 - 請登入`;
+        mailListView.style.display = 'none';
+        mailContentView.style.display = 'none';
+        winTitle.innerText = `系統郵件 - 鎖定中`;
+        updateLEDStatus();
     }
 }
 
 function checkLogin() {
     const id = document.getElementById('user-id').value.trim();
     const pass = document.getElementById('user-pass').value.trim();
-    const errorMsg = document.getElementById('login-error');
-    const mailBody = document.getElementById('mail-body');
+    
+    /* 預留：這裡可以加入錯誤訊息顯示邏輯 */
 
     if (MAIL_DATABASE[id] && pass === "HOME666") {
         currentUser = MAIL_DATABASE[id];
         currentMails = currentUser.mails;
         refreshMailUI();
     } else {
-        if(errorMsg) errorMsg.style.opacity = '1';
-        if(mailBody) mailBody.style.background = 'rgba(255, 0, 0, 0.1)';
-        setTimeout(() => {
-            if(mailBody) mailBody.style.background = 'transparent';
-            if(errorMsg) errorMsg.style.opacity = '0';
-        }, 800);
+        alert("存取拒絕：無效的員工 ID 或 Access Key。");
     }
 }
 
 function renderMailList() {
-    const mailView = document.getElementById('mail-view');
-    if (!mailView) return;
-    mailView.innerHTML = ''; 
+    const container = document.getElementById('mail-items-container');
+    if (!container) return;
+    container.innerHTML = ''; 
 
-    currentMails.forEach((mail, index) => {
+    // 重要：僅顯示已解鎖的信件
+    const visibleMails = currentMails.filter(mail => mail.unlocked);
+
+    visibleMails.forEach((mail) => {
         const div = document.createElement('div');
         const isRead = readMails.has(mail.id);
         
-        // 增加一個 mail-item 類別，並根據已讀狀態增加 read/unread
         div.className = `mail-item ${isRead ? 'read' : 'unread'}`;
         div.style.cursor = 'pointer';
         div.style.padding = '10px';
@@ -70,7 +72,6 @@ function renderMailList() {
         div.style.display = 'flex';
         div.style.flexDirection = 'column';
 
-        // 構建 HTML
         div.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span class="mail-title" style="font-weight: ${isRead ? 'normal' : 'bold'}; color: ${isRead ? '#777' : '#deff9a'};">
@@ -83,39 +84,50 @@ function renderMailList() {
         `;
         
         div.onclick = () => {
-            // 標記為已讀
             if (!readMails.has(mail.id)) {
                 readMails.add(mail.id);
                 saveReadStatus();
             }
-            showMailDetail(index);
+            showMailDetail(mail);
+            renderMailList(); // 重新渲染列表以更新已讀顏色
+            updateLEDStatus();
         };
-        mailView.appendChild(div);
+        container.appendChild(div);
     });
 }
 
-function showMailDetail(index) {
-    const mail = currentMails[index];
-    const mailView = document.getElementById('mail-view');
-    if (!mailView) return;
+function showMailDetail(mail) {
+    const mailListView = document.getElementById('mail-list-view');
+    const mailContentView = document.getElementById('mail-content-view');
     
-    mailView.innerHTML = `
-        <div style="margin-bottom: 15px; border-bottom: 1px solid rgba(222,255,154,0.3); padding-bottom: 5px;">
-            <div id="back-to-list" style="cursor:pointer; color:#aaa; font-size:0.7rem; margin-bottom:5px;">[ ← 返回郵件列表 ]</div>
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <div style="color:#deff9a; font-weight:bold; font-size:1rem;">${mail.title}</div>
-                <div style="color:#555; font-size:0.65rem;">${mail.date || '2024/10/24'}</div>
-            </div>
-            <div style="color:#888; font-size:0.65rem; margin-top:5px;">寄件者: ${mail.sender || '系統'}</div>
-        </div>
-        <div class="mail-content-text" style="font-size:0.85rem; line-height:1.6; color:#daffde; white-space: pre-wrap; height: 180px; overflow-y: auto;">${mail.content}</div>
-    `;
+    mailListView.style.display = 'none';
+    mailContentView.style.display = 'block';
 
-    document.getElementById('back-to-list').onclick = renderMailList;
+    document.getElementById('mail-detail-sender').innerText = `寄件者: ${mail.sender || '系統'}`;
+    document.getElementById('mail-detail-text').innerText = mail.content;
+    
+    /* 預留：未來可以在這裡加入信件附件的功能 */
 }
 
 function saveReadStatus() {
     localStorage.setItem('readMails', JSON.stringify(Array.from(readMails)));
+}
+
+// 與主頁面 HTML 邏輯同步用的 LED 更新
+function updateLEDStatus() {
+    const mailBadge = document.getElementById('mail-notification');
+    const powerLed = document.querySelector('.power-led');
+    
+    // 只有已解鎖且未讀的才算新信
+    const hasUnread = currentMails.some(mail => mail.unlocked && !readMails.has(mail.id));
+    
+    if (currentUser && hasUnread) {
+        if (mailBadge) mailBadge.style.display = 'block';
+        if (powerLed) powerLed.style.display = 'block';
+    } else {
+        if (mailBadge) mailBadge.style.display = 'none';
+        if (powerLed) powerLed.style.display = 'none';
+    }
 }
 
 export function logout() {
@@ -125,3 +137,7 @@ export function logout() {
 }
 
 window.checkLogin = checkLogin;
+window.backToMailList = () => {
+    document.getElementById('mail-list-view').style.display = 'flex';
+    document.getElementById('mail-content-view').style.display = 'none';
+};
