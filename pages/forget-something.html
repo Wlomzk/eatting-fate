@@ -159,24 +159,24 @@
                         <div class="win-btns"><span onclick="toggleWin('win-mail')">×</span></div>
                     </div>
                     <div class="win-body">
-                        <!-- 登入介面 -->
+                        <!-- 登入介面 (骨架化) -->
                         <div id="login-view" class="login-container">
                             <div style="font-size: 1rem; opacity: 0.7;">歸心物流信件匣</div>
                             <input type="text" id="user-id" class="login-input" placeholder="User ID" autocomplete="off">
                             <input type="password" id="user-pass" class="login-input" placeholder="Access Key" autocomplete="off">
                             <button class="login-btn" onclick="checkLogin()">登入</button>
                         </div>
-                        <!-- 郵件清單頁面 -->
+                        <!-- 郵件清單頁面 (骨架化) -->
                         <div id="mail-list-view" class="mail-list">
                             <div class="mail-toolbar">
                                 <span id="user-display-name" style="font-size:1rem; color:#deff9a">User</span>
                                 <div class="logout-btn" onclick="logoutMail()">[登出]</div>
                             </div>
                             <div id="mail-items-container">
-                                <!-- 腳本會在此處動態渲染 mail-item -->
+                                <!-- 內容由模組動態生成 -->
                             </div>
                         </div>
-                        <!-- 郵件內容頁面 -->
+                        <!-- 郵件內容頁面 (骨架化) -->
                         <div id="mail-content-view" class="mail-content-view">
                             <div class="back-btn" onclick="backToMailList()">← 返回</div>
                             <div id="mail-detail-sender" style="font-size: 0.75rem; color: #deff9a; opacity: 0.8; margin-bottom: 5px;"></div>
@@ -204,143 +204,20 @@
            ============================================================ */
         import { NEWSPAPER_DATA } from '../data/newspaper_data.js';
         import { MAIL_DATABASE } from '../data/mail_data.js';
+        // 搬運重點：導入獨立出的郵件系統核心邏輯
+        import { initMailSystem } from '../JS/mail_system.js';
 
         const assets = { turtle: '../image/end3/turtle-shell.webp', news: '../image/newspaper.webp', mirror: '../image/end2/mirror.webp', lcd: '../image/end1/lcd-monitor.webp', phone: '../image/phone.webp' };
         const overlay = document.getElementById('detail-overlay'), detImg = document.getElementById('detail-img'), newsEx = document.getElementById('newspaper-extras'), turtlePz = document.getElementById('turtle-puzzle'), lcdUI = document.getElementById('lcd-ui');
 
-        let currentUserMails = [];
-        
         /* ============================================================
-           [2. 已讀記憶系統] 
+           [2. 系統初始化] 
            ============================================================ */
-        let readMails = new Set(JSON.parse(localStorage.getItem('readMails') || '[]'));
+        // 搬運重點：執行初始化，將邏輯與主頁 DOM 綁定
+        initMailSystem(MAIL_DATABASE);
 
         /* ============================================================
-           [3. 郵件系統邏輯] 
-           ============================================================ */
-        // 修改：新增狀態判斷函式，用於控制 LED 與 紅點
-        function updateLEDStatus() {
-            const mailBadge = document.getElementById('mail-notification');
-            const powerLed = document.querySelector('.power-led');
-            
-            // 修改：僅針對已解鎖且未讀的信件進行判斷
-            const hasUnread = currentUserMails.some(mail => mail.unlocked && !readMails.has(mail.id));
-            
-            if (hasUnread) {
-                if (mailBadge) mailBadge.style.display = 'block';
-                if (powerLed) powerLed.style.display = 'block';
-            } else {
-                if (mailBadge) mailBadge.style.display = 'none';
-                if (powerLed) powerLed.style.display = 'none';
-            }
-        }
-
-        window.checkLogin = function() {
-            const userId = document.getElementById('user-id').value.trim();
-            const pass = document.getElementById('user-pass').value.trim();
-            if (MAIL_DATABASE[userId] && pass === "HOME666") {
-                const userData = MAIL_DATABASE[userId];
-                currentUserMails = userData.mails;
-                document.getElementById('user-display-name').innerText = userData.userName;
-                document.getElementById('mail-win-title').innerText = "系統郵件 - " + userData.userName;
-                renderMailList();
-
-                // 修正：登入後立即判斷是否顯示 LED 與 紅點
-                updateLEDStatus();
-
-                document.getElementById('login-view').style.display = 'none';
-                document.getElementById('mail-list-view').style.display = 'flex';
-                
-                /* 預留 */
-            } else {
-                alert("存取拒絕：無效的員工 ID 或 Access Key。");
-            }
-        };
-
-        // 偵測 Enter 鍵進行登入
-        [document.getElementById('user-id'), document.getElementById('user-pass')].forEach(input => {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkLogin();
-                }
-            });
-        });
-
-        // 偵測 Backspace 返回列表 (當不在輸入框內且在郵件內容頁時)
-        window.addEventListener('keydown', (e) => {
-            const isEditing = document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA';
-            const isContentView = document.getElementById('mail-content-view').style.display === 'block';
-
-            if (e.key === 'Backspace' && !isEditing && isContentView) {
-                e.preventDefault(); 
-                backToMailList();
-            }
-        });
-
-        function renderMailList() {
-            const container = document.getElementById('mail-items-container');
-            container.innerHTML = '';
-            
-            // 修改：過濾掉未解鎖的信件
-            const visibleMails = currentUserMails.filter(mail => mail.unlocked);
-
-            visibleMails.forEach(mail => {
-                const item = document.createElement('div');
-                item.className = 'mail-item';
-                
-                const isRead = readMails.has(mail.id);
-                
-                item.innerHTML = `
-                    <span class="mail-title" style="font-weight: ${isRead ? 'normal' : 'bold'}; color: ${isRead ? '#777' : '#deff9a'};">
-                        ${isRead ? '✉' : '📩'} ${mail.title}
-                    </span>
-                    <span class="mail-date" style="font-size: 0.65rem; opacity: 0.5; align-self: flex-end; margin-top: 4px;">
-                        ${mail.date || '2024/10/24'}
-                    </span>
-                `;
-                
-                item.onclick = () => {
-                    readMails.add(mail.id);
-                    localStorage.setItem('readMails', JSON.stringify(Array.from(readMails)));
-                    readMail(mail);
-                    renderMailList();
-                    
-                    // 修正：讀取郵件後即時更新 LED 狀態
-                    updateLEDStatus();
-                };
-                container.appendChild(item);
-            });
-        }
-
-        window.readMail = function(mail) {
-            document.getElementById('mail-list-view').style.display = 'none';
-            document.getElementById('mail-content-view').style.display = 'block';
-            document.getElementById('mail-detail-text').innerText = mail.content;
-            if(mail.sender) {
-                document.getElementById('mail-detail-sender').innerText = "寄件者: " + mail.sender;
-            }
-        };
-
-        window.logoutMail = function() {
-            document.getElementById('login-view').style.display = 'flex';
-            document.getElementById('mail-list-view').style.display = 'none';
-            document.getElementById('mail-content-view').style.display = 'none';
-            document.getElementById('user-id').value = '';
-            document.getElementById('user-pass').value = '';
-            document.getElementById('mail-win-title').innerText = "系統郵件 - 鎖定中";
-
-            // 修正：登出後立即隱藏 LED 與 紅點
-            document.getElementById('mail-notification').style.display = 'none';
-            document.querySelector('.power-led').style.display = 'none';
-        };
-
-        window.backToMailList = () => {
-            document.getElementById('mail-list-view').style.display = 'flex';
-            document.getElementById('mail-content-view').style.display = 'none';
-        };
-
-        /* ============================================================
-           [4. 視窗切換與 UI 控制] 
+           [3. 視窗切換與 UI 控制] 
            ============================================================ */
         function hideAll() { 
             newsEx.style.display='none'; 
@@ -412,7 +289,7 @@
         };
 
         /* ============================================================
-           [5. 視窗拖曳系統 - 支援手機觸控] 
+           [4. 視窗拖曳系統] 
            ============================================================ */
         let activeWin = null;
         let startX, startY, initialX, initialY;
@@ -458,7 +335,7 @@
         }
 
         /* ============================================================
-           [6. 報紙分頁系統] 
+           [5. 報紙分頁系統] 
            ============================================================ */
         let curP=0;
         window.changePage=(s)=>{ curP=(curP+s+10)%10; renderPage(); };
@@ -476,7 +353,7 @@
         }
 
         /* ============================================================
-           [7. 自適應場景切換] 
+           [6. 自適應場景切換] 
            ============================================================ */
         function updateScene() { document.getElementById('main-scene').src = (window.innerHeight>window.innerWidth) ? "../image/forget-something-m.webp" : "../image/forget-something.webp"; }
         window.addEventListener('resize', updateScene); updateScene();
