@@ -81,7 +81,7 @@ window.handleTrack = function() {
     const resultArea = document.getElementById('search-result');
     
     if (!input || !input.value.trim()) {
-        alert("請輸入貨物檢索碼");
+        alert("請掃描條碼或輸入貨物檢索碼");
         return;
     }
 
