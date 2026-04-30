@@ -32,6 +32,14 @@
         #mirror { width: 11%; height: 26%; left: 32%; top: 56.5%; }
         #lcd-monitor { width: 10%; height: 15%; left: 84.5%; top: 61.5%; }
         #phone-screen { width: 5%; height: 8%; left: 92.5%; top: 66%; }
+        /* [6. 呼吸燈] */
+        .power-led {
+         position: absolute; bottom: -5.2%; right: 2.2%; width: 10px; height: 10px;
+         background: radial-gradient(circle at 30% 30%, #e0ffb0, #a1ff09 60%, #5e9400 100%);
+         box-shadow: 0 0 8px #a1ff09, inset 0 0 2px rgba(255, 255, 255, 0.5);
+         border-radius: 50%; z-index: 4000;
+         animation: led-breath 4s infinite ease-in-out; }
+        @keyframes led-breath { 0%, 100% { opacity: 0.3; box-shadow: 0 0 4px #39FF14; } 50% { opacity: 1; box-shadow: 0 0 8px #39FF14, 0 0 12px rgba(57, 255, 20, 0.6); } }
 
         .img-portrait { height: 90vh; width: auto; object-fit: contain; }
         .img-lcd-special { width: 63vw; height: 60vw; max-height: 90vh; object-fit: cover; object-position: center 45%; }
@@ -66,9 +74,6 @@
         .mail-content-view { display: none; }
         .back-btn { color: #deff9a; cursor: pointer; border: 1px solid rgba(222, 255, 154, 0.3); padding: 6px 8px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 10px; display: inline-block; }
 
-        /* [6. 呼吸燈] */
-        .power-led { position: absolute; bottom: -5.2%; right: 2.2%; width: 10px; height: 10px; background-color: #a1ff09; border-radius: 50%; z-index: 4000; animation: led-breath 4s infinite ease-in-out; }
-        @keyframes led-breath { 0%, 100% { opacity: 0.3; box-shadow: 0 0 4px #39FF14; } 50% { opacity: 1; box-shadow: 0 0 8px #39FF14, 0 0 12px rgba(57, 255, 20, 0.6); } }
 
         /* ============================================================
            [7. 報紙 UI] 
@@ -142,7 +147,7 @@
             <img id="detail-img" src="">
             
             <div id="lcd-ui" class="lcd-desktop">
-                <div class="power-led" style="display: none;"></div>
+                <div class="power-led"></div>
                 <div class="icon-bar">
                     <div class="lcd-icon" onclick="toggleWin('win-mail')">
                         <div id="mail-notification" class="unread-badge" style="display: none;"></div>

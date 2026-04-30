@@ -133,21 +133,18 @@ export function initMailSystem(MAIL_DATABASE) {
     }
 
     /**
-     * 更新 LED 呼吸燈與紅點狀態 - 主頁最新狀態判定
+     * 更新紅點狀態 - 主頁最新狀態判定
      */
     function updateLEDStatus() {
         const mailBadge = document.getElementById('mail-notification');
-        const powerLed = document.querySelector('.power-led');
         
         // 判定邏輯：必須登入 且 存在「已解鎖但未讀」的信件
         const hasUnread = currentMails.some(mail => mail.unlocked && !readMails.has(mail.id));
         
         if (currentUser && hasUnread) {
             if (mailBadge) mailBadge.style.display = 'block';
-            if (powerLed) powerLed.style.display = 'block';
         } else {
             if (mailBadge) mailBadge.style.display = 'none';
-            if (powerLed) powerLed.style.display = 'none';
         }
     }
 
