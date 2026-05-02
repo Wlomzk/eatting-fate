@@ -18,25 +18,26 @@
 .gx-phone-wrapper {
     position: fixed;
     bottom: -600px; /* 初始隱藏 */
-    right: 80px;
-    width: 331px;
-    height: 567px;
+    right: 82px;
+    width: 300px;
+    height: 597px;
     z-index: 9999;
     transition: bottom 0.5s ease;
 }
 
 /* 開啟狀態 */
 .gx-phone-wrapper.is-open {
-    bottom: 20px; /* 打開後距離底部 */
+    bottom: 0px; /* 打開後距離底部 */
 }
 
 /* 手機螢幕 */
 .gx-phone-screen {
     width: 100%;
     height: 100%;
-    background: #000;
-    border: 2px solid #333;
-    position: relative;
+    background-image: url('../image/phone/phone-new.webp'); 
+    background-size: cover;       /* 確保圖片鋪滿 */
+    background-position: center;  /* 確保圖片置中 */
+
 }
 
 /* 關閉按鈕樣式 */
