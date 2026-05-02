@@ -14,16 +14,30 @@
         const phoneScreen = document.createElement("div");
         phoneScreen.className = "gx-phone-screen";
         phoneScreen.innerHTML = `
-            <div class="gx-phone-close" id="gx-close">×</div>
-            <div style="color:#32CD32; padding:50px; font-family:Courier New, monospace;">
-                [歸心物流終端]<br>
-                ----------------<br>
-                系統已就緒...<br>
-                貞人脈絡：已耦合<br>
-                座標：Tamsui-Dist
+        <div class="gx-status-bar">
+        <div class="gx-status-signal" id="status-signal">信号: 强</div>
+        <div id="system-time" style="font-size: 12px; font-family: monospace;">--:--</div>
+        <div class="gx-status-battery" id="status-battery">
+            <div class="battery-body">
+                <div class="battery-fill" id="battery-fill"></div>
             </div>
-            <div id="gx-crack-overlay"></div>
-        `;
+            <span id="battery-text">100%</span>
+        </div>
+    </div>    
+        
+        <div class="gx-phone-close" id="gx-close" style="z-index: 100;">×</div>
+    
+    <div class="gx-app-layer">
+        <div style="color:#32CD32; padding:50px; font-family:Courier New, monospace;">
+            [歸心物流終端]<br>
+            ----------------<br>
+            系統已就緒...<br>
+            <button class="gx-interact-btn">【功能測試】</button>
+        </div>
+    </div>
+
+    <div class="gx-crack-overlay"></div>
+`;
 
         // 3. 組裝結構
         phoneWrapper.appendChild(phoneScreen);
@@ -51,3 +65,25 @@
         console.log("歸心物流終端機：骨架已掛載，等待貞人啟動。");
     });
 })();
+
+function updateClock() {
+    const timeElement = document.getElementById('system-time');
+    if (!timeElement) return;
+
+    const now = new Date();
+    
+    // 將 hour12 改為 true，並且確保時區設定正確
+    const timeString = now.toLocaleTimeString('zh-TW', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: true // 關鍵在這裡：設為 true 就會自動顯示上午/下午
+    });
+
+    timeElement.innerText = timeString;
+}
+
+// 啟動計時器，每 1000 毫秒（1秒）刷新一次
+setInterval(updateClock, 1000);
+
+// 頁面載入時先執行一次，才不會等一秒才顯示
+updateClock();

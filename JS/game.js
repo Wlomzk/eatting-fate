@@ -8,11 +8,13 @@ import { ARCHIVE_DATABASE } from '../data/keyword.js';
 function updateHeroBanner() {
     const hero = document.getElementById('page-home');
     if (!hero) return;
+    /*
     const isMobile = (window.innerWidth < 768);
     const img = isMobile ? "image/index-mobile.webp" : "image/hero-bg.webp";
     hero.style.backgroundImage = `url('${img}')`;
     hero.style.backgroundSize = "cover";
     hero.style.backgroundPosition = "center";
+    */
 }
 
 // --- [ 2. 手機版全螢幕選單控制 - 拉姆大一統版 ] ---

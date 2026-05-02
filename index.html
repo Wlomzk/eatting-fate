@@ -134,14 +134,18 @@
     <script type="module" src="JS/game.js"></script>
     <script>
         function updateHeroBanner() {
+            console.log("updateHeroBanner 已停用"); // 加這行，如果 Console 沒出現這行字，代表函數沒在運作
+            return;
+            /*
             const hero = document.getElementById('page-home');
             if (!hero) return;
             const isMobile = window.innerWidth < 768;
-            const img = isMobile ? "image/BROKEN-small.webp" : "image/hero-bg.webp";
+            const img = isMobile ? "image/stop-sad.webp" : "image/Ghost-rriage.webp";
             const currentBg = hero.style.backgroundImage;
             if (!currentBg.includes(img)) {
                 hero.style.backgroundImage = `url('${img}')`;
             }
+                */
         }
         window.addEventListener('load', updateHeroBanner);
         window.addEventListener('resize', updateHeroBanner);

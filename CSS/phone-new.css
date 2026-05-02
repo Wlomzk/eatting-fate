@@ -30,8 +30,9 @@
     bottom: -70px; /* 打開後距離底部 */
 }
 
-/* 手機螢幕 */
+/* 手機螢幕(底層) */
 .gx-phone-screen {
+    position: relative; /* 這是必須的，作為內部層級的基準 */
     width: 100%;
     height: 100%;
     background-image: url('../image/phone/phone-new.webp'); 
@@ -40,14 +41,99 @@
 
 }
 
+/* --- 2. 【中間層】 APP 互動元件層 --- */
+.gx-app-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* 比背景高，但比破碎層低 */
+}
+
+/* 測試用的按鈕樣式 */
+.gx-interact-btn {
+    background: #1a1a1a;
+    border: 1px solid #32CD32;
+    color: #32CD32;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* --- 3. 【最上層】 破碎螢幕層 (核心魔法) --- */
+.gx-crack-overlay {
+    position: absolute;
+    top: 11px;
+    left: 28px;
+    width: 97%;
+    height: 100%;
+    z-index: 20; /* 永遠在最上層 */
+    
+    /* 載入您提供的破碎圖片 */
+    background-image: url('../image/phone/BROKEN-small.webp'); /* 請確認圖片檔名與路徑 */
+    background-size: contain; /* 如果覺得圖片被拉伸，可以改成 contain */
+    background-position: center 20px;
+    background-repeat: no-repeat;
+
+    /* 核心：允許點擊穿透 (Pass-through) */
+    pointer-events: none; /* 關鍵！點擊會直接「穿過」這層，打在中間層的 APP 上 */
+}
+
 /* 關閉按鈕樣式 */
 .gx-phone-close {
     position: absolute;
     top: 10px;
-    right: 15px;
-    color: #32CD32;
+    right: -10px;
+    color: #18c018;
     font-size: 24px;
     cursor: pointer;
+}
+
+/* 狀態列容器 */
+.gx-status-bar {
+    position: absolute; /* 關鍵：相對於手機螢幕定位 */
+    top: 21px;             /* 釘在最頂端 */
+    left: 38px;            /* 靠左對齊 */
+    width: 83%;        /* 寬度撐滿整個手機容器 */
+    box-sizing: border-box; /* 關鍵：確保 padding 不會讓寬度爆掉 */
+
+    /* 格式：左上角的X Y, 右上角的X Y, 右下角的X Y, 左下角的X Y */
+    clip-path: polygon(28px 0, calc(102% - 28px) 0, 105% 100%, 0 100%, 7% 0%);
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 讓訊號和電池垂直置中 */
+    
+    padding: 8px 15px; /* 您可以微調這個高度 */
+    font-size: 12px;
+    color: #32CD32;
+    background: rgba(0, 0, 0, 0.6); /* 給一點點深色底，避免字看不清 */
+    
+    z-index: 15;        /* 確保高於背景，低於破碎層 */
+    pointer-events: none; /* 讓狀態列本身不影響點擊 (如果是純顯示) */
+}
+
+/* 電池外框 */
+.battery-body {
+    width: 25px;
+    height: 10px;
+    border: 1px solid #32CD32;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* 電池填充 (這裡用 CSS 變數控制寬度) */
+.battery-fill {
+    height: 100%;
+    background: #32CD32;
+    width: var(--battery-level, 100%); /* 預設 100% */
+    transition: width 0.5s ease, background 0.3s;
+}
+
+/* 充電狀態樣式 (之後會用到) */
+.is-charging .battery-fill {
+    background: #FFD700; /* 充電時變黃色 */
 }
 
 /* 手機版：滿版置中 */
@@ -64,4 +150,22 @@
     .gx-phone-wrapper.is-open {
         bottom: 20px; 
     }
+
+    .gx-crack-overlay {
+    position: absolute;
+    top: 11px;
+    left: 56px;
+    width: 83%;
+    height: 100%;
+    z-index: 20; /* 永遠在最上層 */
+}
+
+.gx-status-bar {
+    position: absolute; /* 關鍵：相對於手機螢幕定位 */
+    top: 17px;             /* 釘在最頂端 */
+    left: 60px;            /* 靠左對齊 */
+    width: 73%;        /* 寬度撐滿整個手機容器 */
+    box-sizing: border-box; /* 關鍵：確保 padding 不會讓寬度爆掉 */
+}
+
 }
