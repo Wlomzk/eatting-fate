@@ -1,103 +1,66 @@
-/* ==============================================
-   歸心物流終端機 - 模組化 CSS (固定解析度架構)
-   命名空間: .gx- (Guixin)
-   ============================================== */
-
-/* 1. 終端機開關 (釘在右下角) */
+/* 觸發按鈕 */
 .gx-terminal-trigger {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 48px;
-    height: 77px;
-    background-color: #1a1a1a;
+    width: 50px;
+    height: 80px;
+    background: #1a1a1a;
     border: 2px solid #32CD32;
-    clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%);
-    z-index: 10000;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(50, 205, 50, 0.5);
     display: flex;
-    justify-content: center;
     align-items: center;
-    transition: all 0.3s ease;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 9998;
 }
 
-.gx-terminal-trigger:hover {
-    box-shadow: 0 0 20px rgba(50, 205, 50, 0.8);
-    transform: scale(1.05);
-}
-
-.gx-terminal-trigger::after {
-    content: "手   機";
-    color: #32CD32;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 12px;
-    writing-mode: vertical-rl;
-}
-
-/* 2. 手機外層容器 (控制開關動畫與位置) */
+/* 手機容器 */
 .gx-phone-wrapper {
     position: fixed;
-    bottom: 20px;
-    right: 76px; /* 放在開關旁邊 */
+    bottom: -600px; /* 初始隱藏 */
+    right: 80px;
     width: 331px;
     height: 567px;
     z-index: 9999;
-    /* 核心邏輯：使用 transform 控制顯示/隱藏，效能最好 */
-    transform: translateY(110%);
-    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transition: bottom 0.5s ease;
 }
 
+/* 開啟狀態 */
 .gx-phone-wrapper.is-open {
-    transform: translateY(0);
+    bottom: 20px; /* 打開後距離底部 */
 }
 
-/* 3. 手機主介面 (實際畫布) */
+/* 手機螢幕 */
 .gx-phone-screen {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #0f1c2b 0%, #06090f 100%);
-    border: 4px solid #333;
-    clip-path: polygon(8% 0%, 92% 0%, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0% 92%, 0% 8%);
+    background: #000;
+    border: 2px solid #333;
     position: relative;
-    overflow: hidden;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.8);
 }
 
-/* 4. 手機內部的裂痕圖層 */
-#gx-crack-overlay {
+/* 關閉按鈕樣式 */
+.gx-phone-close {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* 已修正：正確使用 url() */
-    background-image: url('image/phone/BROKEN-small.webp');
-    background-size: cover;
-    pointer-events: none; /* 讓點擊穿透 */
-    opacity: 0;
-    z-index: 10;
+    top: 10px;
+    right: 15px;
+    color: #32CD32;
+    font-size: 24px;
+    cursor: pointer;
 }
 
-/* ==============================
-   手機版專用座標修正 (強制鎖定)
-   ============================== */
+/* 手機版：滿版置中 */
 @media (max-width: 600px) {
     .gx-phone-wrapper {
-        /* 強制將手機外殼定位在螢幕正確的位置 */
-        /* 手機版我們不建議用 vh，直接用 px 最穩 */
-        top: 60px !important; /* 從底部往上10px，避免被瀏覽器UI擋住 */
-        bottom: 10px !important; 
-        right: 10px !important;
-        
-        /* 避免因為內容縮放導致的偏移，強制保持在右下角 */
-        transform-origin: bottom right;
-        transform: scale(0.9); /* 如果覺得手機版太擠，這裡可以稍微縮小 */
+        right: 0; 
+        left: 0; 
+        bottom: -600px; /* 這是收起來的狀態，設回負值讓它藏起來 */
+        width: 90%;
+        margin: 0 auto;
     }
 
-    .gx-terminal-trigger {
-        /* 確保開關不會被手機瀏覽器的底部列擋住 */
-        bottom: 20px !important;
-        right: 20px !important;
+    /* 這裡才是關鍵：當手機加上 is-open class 時，才讓它滑上來 */
+    .gx-phone-wrapper.is-open {
+        bottom: 20px; 
     }
 }

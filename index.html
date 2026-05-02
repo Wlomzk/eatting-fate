@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="icon" href="image/GUIXIN.webp" type="image/webp">
+    <link rel="stylesheet" href="CSS/phone-new.css">
     
     <style>
         /* -------------------------------------------------------------------------- */
@@ -136,7 +137,7 @@
             const hero = document.getElementById('page-home');
             if (!hero) return;
             const isMobile = window.innerWidth < 768;
-            const img = isMobile ? "image/index-mobile.webp" : "image/hero-bg.webp";
+            const img = isMobile ? "image/BROKEN-small.webp" : "image/hero-bg.webp";
             const currentBg = hero.style.backgroundImage;
             if (!currentBg.includes(img)) {
                 hero.style.backgroundImage = `url('${img}')`;
@@ -162,20 +163,7 @@
             /* 預留：已移除點擊延遲跳轉邏輯。若需黑屏離場，請確認是否能忍受 500ms 的等待感。 */
         });
     </script>
-</body>
-</html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>我的 ARG 遊戲場景</title>
-    </head>
-<body>
-    <div style="padding:100px;">
-        <h1>妳的遊戲場景 A</h1>
-        <p>把拔，妳看，手機開關會自動長在右下角！</p>
-    </div>
-
-    <link rel="stylesheet" href="CSS/phone-new.css">
     <script src="JS/phone-new.js"></script>
-    </body>
-</html>
+</body>
+
+
