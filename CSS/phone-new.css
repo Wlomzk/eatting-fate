@@ -6,10 +6,14 @@
 /* 1. 終端機開關 (釘在右下角的小圖標) */
 .gx-terminal-trigger {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;  /* 小小的縱向圖片 */
-    height: 100px;
+    /* 改用 vh/vw，永遠貼在右下角比例正確的位置 */
+    bottom: 3vh; 
+    right: 3vw;
+    /* 限制最大寬度，避免在電腦上看太大 */
+    width: 15vw; 
+    max-width: 60px; 
+    height: auto;
+    aspect-ratio: 1 / 1.6; /* 強制縱向比例 */
     background-color: #1a1a1a; /* 工業黑 */
     border: 2px solid #32CD32;   /* 螢光綠線條 */
     
@@ -44,10 +48,11 @@
 /* 2. 手機主介面 (預設隱藏) */
 .gx-phone-screen {
     position: fixed;
-    bottom: -600px; /* 初始位置在螢幕下方 (隱藏) */
-    right: 20px;
-    width: 320px;   /* 手機寬度 */
-    height: 550px;  /* 手機高度 */
+    bottom: -90vh; 
+    right: 3vw;
+    width: 90vw;
+    max-width: 350px; /* 超過 350px 就不會再變寬了 */
+    height: 70vh;     /* 手機高度佔螢幕 70% */
     background: linear-gradient(135deg, #0f1c2b 0%, #06090f 100%); /* 深灰藍漸層 */
     border: 4px solid #333;   /* 邊框 */
     
@@ -63,7 +68,7 @@
 
 /* 3. 當手機開啟時的樣式 */
 .gx-phone-screen.is-open {
-    bottom: 130px; /* 滑上來，離底部開關遠一點 */
+    bottom: 10vh; /* 滑上來，離底部開關遠一點 */
 }
 
 /* 手機內部的「裂痕圖層」( pointer-events: none ) */
