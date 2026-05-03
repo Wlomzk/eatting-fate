@@ -32,7 +32,7 @@ export const MAIL_DATABASE = {
   "EMP002": {
     mails: [
       {
-        id: "M1", date: "&*^$#$%*(&#&", sender: "輪迴之主",    // 這裡補上逗號（如果後面還有屬性
+        id: "M5", date: "&*^$#$%*(&#&", sender: "輪迴之主",    // 這裡補上逗號（如果後面還有屬性
         title: "欸!!",
         content: "跑去哪了?", // 確保這裡有逗號   
         unlocked: true       // 預設為已解鎖，玩家登入即可見
