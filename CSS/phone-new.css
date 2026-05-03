@@ -110,7 +110,7 @@
     left: 28px;
     width: 97%;
     height: 100%;
-    z-index: 20;
+    z-index: 250;
     background-image: url('../image/phone/BROKEN-small.webp');
     background-size: contain;
     background-position: center 20px;
@@ -193,37 +193,97 @@
 .gx-modal-body { padding: 20px; font-family: monospace; }
 
 #gx-battery-notifier {
-    position: absolute;       /* 相對於手機容器定位 */
-    top: 150px;               /* 距離手機頂部的距離，可微調 */
-    right: -65px;             /* 關鍵：負數讓它向右延伸到螢幕外面 */
-    
-    width: 50px;              /* 寬度 */
-    min-height: 180px;        /* 高度 */
-    
-    background: #0a0a0a;
-    border: 2px solid #32CD32;
-    color: #32CD32;
-    padding: 10px 5px;
-    
+    position: absolute;       /* 鎖定在手機螢幕內 */
+    top: 148px;                /* 位置調整 */
+    left: 55px;               /* 讓它有邊距 */
+    right: 31px;              /* 讓它有邊距 */
+    height: auto;             /* 高度隨內容自動調整 */
+    background: rgba(34, 34, 34, 0.938); /* 黑色背景 */
+    border: 1px solid #32CD32;
+    color: #3a1d1d;
+    padding: 15px;
+
     /* 隱藏預設 */
     display: none; 
-    z-index: 10000;
+    z-index: 105;
     
-    /* --- 核心：直式排版 --- */
-    writing-mode: vertical-rl; /* 文字由右向左直排 */
-    text-orientation: upright; /* 文字保持直立 */
+    /* 橫式佈局 */
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    font-family: monospace;
     
     /* 視覺裝飾 */
-    border-radius: 0 10px 10px 0; /* 右側圓角，像個延伸的標籤 */
-    box-shadow: 2px 0 10px rgba(50, 205, 50, 0.3);
-    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    cursor: default;
     font-family: monospace;
+}
+
+/* 關閉按鈕樣式 */
+.gx-notify-close {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #FF4444; /* 用紅色提醒是關閉 */
     font-weight: bold;
 }
 
+.gx-notify-close:hover { color: #ff8888; }
+
 #gx-battery-notifier:hover {
     background: #1a1a1a;
-    border-color: #4dfc4d;
+    border-color: #4b634b;
+}
+
+/* 充電遮罩層 */
+.gx-charging-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* 深色背景 */
+    z-index: 200;                  /* 確保蓋住所有 APP */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #32CD32;
+    font-family: monospace;
+}
+
+/* 充電圖示或圖片的樣式 */
+.gx-charging-icon {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+    /* 這裡可以放您的充電線圖片 */
+    border: 2px solid #32CD32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 右側充電指示框 */
+.gx-charging-indicator {
+    position: absolute;
+    top: 500px;           /* 調整垂直位置 */
+    right: 110px;          /* 固定在右側 */
+    width: 60px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid #32CD32;
+    color: #32CD32;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;       /* 小型字體 */
+    font-family: monospace;
+    z-index: 100;         /* 確保在最上層 */
+    pointer-events: none; /* 讓點擊穿透，不會擋到其他操作 */
 }
 
 /* 預設隱藏的 APP */
@@ -242,7 +302,7 @@
 /* --- 5. 響應式調整 --- */
 @media (max-width: 600px) {
     .gx-phone-wrapper { right: 0; left: 0; width: 90%; margin: 0 auto; }
-    .gx-phone-wrapper.is-open { bottom: 20px; }
+    .gx-phone-wrapper.is-open { left: -55px; bottom: 20px; }
     .gx-phone-close { right: -77px; left: 323px; width: 90%; margin: 0 auto; }
     .gx-crack-overlay { position: absolute; top: 11px; left: 56px; width: 83%; height: 100%; }
     .gx-status-bar { position: absolute; top: 3px; left: 57px; width: 75%; }
