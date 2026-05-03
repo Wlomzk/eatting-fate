@@ -208,9 +208,9 @@
            [1. 資料與模組載入] 
            ============================================================ */
         import { NEWSPAPER_DATA } from '../data/newspaper_data.js';
+        import { AuthSystem } from '../data/whoiswatching.js'; // 你的帳號驗證系統
         import { MAIL_DATABASE } from '../data/mail_data.js';
-        // 搬運重點：導入獨立出的郵件系統核心邏輯
-        import { initMailSystem } from '../JS/mail_system.js';
+        import { initMailSystem, loadUserIntoMailSystem } from '../JS/mail_system.js'; // 搬運重點：導入獨立出的郵件系統核心邏輯
 
         const assets = { turtle: '../image/end3/turtle-shell.webp', news: '../image/newspaper.webp', mirror: '../image/end2/mirror.webp', lcd: '../image/end1/lcd-monitor.webp', phone: '../image/phone/phone-new.webp' };
         const overlay = document.getElementById('detail-overlay'), detImg = document.getElementById('detail-img'), newsEx = document.getElementById('newspaper-extras'), turtlePz = document.getElementById('turtle-puzzle'), lcdUI = document.getElementById('lcd-ui');
@@ -220,6 +220,30 @@
            ============================================================ */
         // 搬運重點：執行初始化，將邏輯與主頁 DOM 綁定
         initMailSystem(MAIL_DATABASE);
+
+        // 新的登入邏輯：由 HTML 按鈕觸發
+window.checkLogin = () => {
+    const idInput = document.getElementById('user-id').value.trim();
+    const passInput = document.getElementById('user-pass').value.trim();
+
+    // 1. 呼叫權限系統檢查
+    const authResult = AuthSystem.checkLogin(idInput, passInput);
+
+    if (authResult.success) {
+        // 2. 如果成功，組裝完整的使用者資料
+        // 2.1 取得該員工的資料 (MAIL_DATABASE 的內容)
+        const userData = MAIL_DATABASE[idInput];
+        // 因為 MAIL_DATABASE 存有信件，AuthSystem 存有權限
+        const userFullData = {
+    ...authResult.user,  // 直接繼承 { name: "拉姆", password: ... }
+    mails: userData ? userData.mails : []
+};
+
+        loadUserIntoMailSystem(userFullData);
+    } else {
+        alert(authResult.message);
+    }
+};
 
         /* ============================================================
            [3. 視窗切換與 UI 控制] 

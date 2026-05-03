@@ -13,20 +13,23 @@ let readMails = new Set(JSON.parse(localStorage.getItem('readMails') || '[]'));
 export function initMailSystem(MAIL_DATABASE) {
     // 綁定鍵盤事件 (全域輔助)
     setupEventListeners();
-    
-    // 注入登入功能至全域
-    window.checkLogin = function() {
-        const id = document.getElementById('user-id').value.trim();
-        const pass = document.getElementById('user-pass').value.trim();
+}
 
-        if (MAIL_DATABASE[id] && pass === "HOME666") {
-            currentUser = MAIL_DATABASE[id];
-            currentMails = currentUser.mails;
-            refreshMailUI();
-        } else {
-            alert("存取拒絕：無效的員工 ID 或 Access Key。");
-        }
-    };
+// 【合併後的唯一入口】
+export function loadUserIntoMailSystem(data) {
+    // 1. 將完整的資料存入 currentUser
+    currentUser = data; 
+    
+    // 2. 將該使用者的信件存入 currentMails
+    currentMails = data.mails || []; 
+    
+    // 3. 直接呼叫你原本就寫好的 UI 更新邏輯
+    // 這樣就不需要手動在外面改 innerText，程式碼更簡潔
+    refreshMailUI(); 
+    
+    // 4. 隱藏登入介面，顯示列表
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('mail-list-view').style.display = 'flex';
 }
 
 // ------------------------------------------------------------
@@ -50,14 +53,23 @@ function refreshMailUI() {
     const mailListView = document.getElementById('mail-list-view');
     const mailContentView = document.getElementById('mail-content-view');
     const winTitle = document.getElementById('mail-win-title');
+    const nameDisplay = document.getElementById('user-display-name');
+
+    // --- 【除錯用】檢查看看變數與元素 ---
+    console.log("當前使用者:", currentUser); 
+    console.log("名字顯示元素:", nameDisplay);
+    // ----------------------------------
 
     if (currentUser) {
         loginView.style.display = 'none';
         mailListView.style.display = 'flex';
         mailContentView.style.display = 'none';
+
+        // 使用 || "員工" 當作預設值，避免 undefined 錯誤
+        const displayName =currentUser.name || currentUser.userName || "員工";
         
         winTitle.innerText = `系統郵件 - ${currentUser.userName}`;
-        document.getElementById('user-display-name').innerText = currentUser.userName;
+        document.getElementById('user-display-name').innerText = currentUser.name
         
         renderMailList();
         updateLEDStatus(); 
