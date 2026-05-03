@@ -35,7 +35,7 @@
 .gx-phone-screen {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 95%;
     background-image: url('../image/phone/phone-new.webp');
     background-size: cover;
     background-position: center;
@@ -45,10 +45,10 @@
 .gx-app-layer {
     position: absolute;
     /* 這裡透過設定邊距來控制範圍，不要寫 width/height */
-    top: 52px;
-    left: 37px;
-    right: 10px;
-    bottom: 150px;
+    top: 56px;
+    left: 39px;
+    right: 12px;
+    bottom: 141px;
     /* 這裡替換成新的切角邏輯 */
     /* 參數解釋：切角大小設定為 20px，您可以根據手機圖片實際的斜角大小微調這個數字 */
     clip-path: polygon(
@@ -120,32 +120,62 @@
 
 .gx-status-bar {
     position: absolute;
-    top: 21px;
-    left: 38px;
-    width: 83%;
+    top: 17px;
+    left: 40px;
+    width: 80%;
     box-sizing: border-box;
-    clip-path: polygon(28px 0, calc(102% - 28px) 0, 105% 100%, 0 100%, 7% 0%);
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 15px;
+    padding: 11px 15px;
     font-size: 12px;
     color: #32CD32;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 15;
     pointer-events: none;
+    /* 這裡替換成新的切角邏輯 */
+    /* 參數解釋：切角大小設定為 20px，您可以根據手機圖片實際的斜角大小微調這個數字 */
+    clip-path: polygon(
+        0 25px,              /* 左側邊緣往下 (留出切角空間) */
+    25px 0,              /* 左上角切角點 */
+    calc(100% - 25px) 0, /* 右上角切角點 */
+    100% 25px,           /* 右側邊緣往下 (留出切角空間) */
+    100% 100%,           /* 右下角 (不動) */
+    0 100%
+        );
 }
 
 .battery-body { width: 25px; height: 10px; border: 1px solid #32CD32; display: inline-block; vertical-align: middle; }
-.battery-fill { height: 100%; background: #32CD32; width: var(--battery-level, 100%); transition: width 0.5s ease, background 0.3s; }
+
 .gx-phone-close { position: absolute; top: 10px; right: -10px; color: #18c018; font-size: 24px; cursor: pointer; }
+
+/* 修改電池填充物的樣式 */
+.battery-fill {
+    height: 100%;
+    background: #32CD32; /* 初始綠色 */
+    width: 100%;
+    transition: width 0.5s ease, background 0.5s ease;
+}
+
+/* 低電量狀態 */
+.battery-fill.warning { background: #FFD700; } /* 黃色 */
+.battery-fill.danger { background: #FF4444; }  /* 紅色 */
 
 /* --- 4. 彈出視窗 --- */
 .gx-modal {
     display: none;
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 56px; left: 39px; width: 81%; height: 69%;
     background: rgba(0, 0, 0, 0.8);
+    clip-path: polygon(
+        0 0,                        /* 左上角 (不動) */
+        100% 0,                     /* 右上角 (不動) */
+        100% calc(100% - 25px),     /* 右側邊緣往下直到切角起點 */
+        calc(100% - 25px) 100%,     /* 右下角切角點 */
+        25px 100%,                  /* 左下角切角點 */
+        0 calc(100% - 25px)         /* 左側邊緣往下直到切角起點 */
+        );
     z-index: 100;
 }
 
@@ -162,15 +192,63 @@
 .gx-modal-close { background: none; border: none; color: #ff4444; font-size: 20px; cursor: pointer; }
 .gx-modal-body { padding: 20px; font-family: monospace; }
 
+#gx-battery-notifier {
+    position: absolute;       /* 相對於手機容器定位 */
+    top: 150px;               /* 距離手機頂部的距離，可微調 */
+    right: -65px;             /* 關鍵：負數讓它向右延伸到螢幕外面 */
+    
+    width: 50px;              /* 寬度 */
+    min-height: 180px;        /* 高度 */
+    
+    background: #0a0a0a;
+    border: 2px solid #32CD32;
+    color: #32CD32;
+    padding: 10px 5px;
+    
+    /* 隱藏預設 */
+    display: none; 
+    z-index: 10000;
+    
+    /* --- 核心：直式排版 --- */
+    writing-mode: vertical-rl; /* 文字由右向左直排 */
+    text-orientation: upright; /* 文字保持直立 */
+    
+    /* 視覺裝飾 */
+    border-radius: 0 10px 10px 0; /* 右側圓角，像個延伸的標籤 */
+    box-shadow: 2px 0 10px rgba(50, 205, 50, 0.3);
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+#gx-battery-notifier:hover {
+    background: #1a1a1a;
+    border-color: #4dfc4d;
+}
+
+/* 預設隱藏的 APP */
+.gx-app-item.is-locked {
+    display: none; 
+}
+
+/* 如果想讓鎖定的 APP 呈現半透明或黑白，可以取消註解這段 */
+
+.gx-app-item.is-locked {
+    display: flex;
+    filter: grayscale(1) brightness(0.5);
+    pointer-events: none; 
+}
+
 /* --- 5. 響應式調整 --- */
 @media (max-width: 600px) {
     .gx-phone-wrapper { right: 0; left: 0; width: 90%; margin: 0 auto; }
     .gx-phone-wrapper.is-open { bottom: 20px; }
     .gx-phone-close { right: -77px; left: 323px; width: 90%; margin: 0 auto; }
     .gx-crack-overlay { position: absolute; top: 11px; left: 56px; width: 83%; height: 100%; }
-    .gx-status-bar { position: absolute; top: 17px; left: 60px; width: 73%; }
-    .gx-app-layer { top: 50px; left: 61px; right: 32px; bottom: 152px; }
+    .gx-status-bar { position: absolute; top: 3px; left: 57px; width: 75%; }
+    .gx-app-layer { top: 43px; left: 58px; right: 32px; bottom: 132px; }
     .gx-app-grid { gap: 16px; padding: 19px 13px; }
+    .gx-modal { top: 43px; left: 56px; width: 75%; height: 73%;}
 }
 
 /* --- 故障效果核心邏輯 --- */
@@ -192,6 +270,11 @@
   40% { transform: translateX(5px); filter: hue-rotate(-90deg); }
   60% { transform: translateX(-2px); }
   100% { transform: translateX(0); filter: hue-rotate(0deg); }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 /* --- 應用這些效果的 CSS 類別 --- */
