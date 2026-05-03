@@ -27,7 +27,20 @@ export const MAIL_DATABASE = {
       }
       /* 預留 */
     ]
+  },
+
+  "EMP002": {
+    mails: [
+      {
+        id: "M1", date: "&*^$#$%*(&#&", sender: "輪迴之主",    // 這裡補上逗號（如果後面還有屬性
+        title: "欸!!",
+        content: "跑去哪了?", // 確保這裡有逗號   
+        unlocked: true       // 預設為已解鎖，玩家登入即可見
+      }
+      /* 預留 */
+    ]
   }
+  
 };
 
 // TODO: 之後增加更多員工資料

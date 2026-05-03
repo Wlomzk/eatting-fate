@@ -68,7 +68,7 @@ function refreshMailUI() {
         // 使用 || "員工" 當作預設值，避免 undefined 錯誤
         const displayName =currentUser.name || currentUser.userName || "員工";
         
-        winTitle.innerText = `系統郵件 - currentUser.name`;
+        winTitle.innerText = `系統郵件 - ${currentUser.name}`;
         document.getElementById('user-display-name').innerText = currentUser.name
         
         renderMailList();
