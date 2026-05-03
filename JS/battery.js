@@ -7,7 +7,6 @@
 window.batteryLevel = savedBattery !== null ? parseInt(savedBattery) : 100;
 
 // 全域變數 (掛載在 window 下確保其他檔案也能存取)
-window.batteryLevel = 100;
 window.lastAlertLevel = 0; // 紀錄上一次報警的層級
 window.chargingInterval = null;
 window.alert60Shown = false; 
@@ -112,8 +111,12 @@ function handleCharge() {
         } else {
             clearInterval(chargingInterval);
             chargingInterval = null;
-            warned60 = false;
-            warned30 = false;
+            
+            // --- 修正這裡：改用新的變數名稱 ---
+            alert60Shown = false;
+            alert30Shown = false;
+            // -------------------------------
+            
             hideChargingIndicator(); 
             alert("系統充能完畢。");
         }
