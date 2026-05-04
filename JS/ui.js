@@ -10,14 +10,27 @@ export function updateHeroBanner() {
 
 export function toggleMenu() {
     const mobileMenu = document.getElementById('mobile-menu');
-    if (!mobileMenu) return;
+    
+    // 除錯日誌 1：檢查函數是否被觸發
+    console.log("toggleMenu 函數已執行");
 
-    // 1. 直接切換 class (Tailwind 的 hidden 會處理 display: none)
+    if (!mobileMenu) {
+        console.error("錯誤：找不到 ID 為 'mobile-menu' 的元素！請檢查 HTML。");
+        return;
+    }
+
+    // 除錯日誌 2：顯示當前狀態
+    const isCurrentlyHidden = mobileMenu.classList.contains('hidden');
+    console.log("當前選單狀態 (hidden class):", isCurrentlyHidden);
+
+    // 1. 切換 class
     mobileMenu.classList.toggle('hidden');
 
-    // 2. 判斷現在是開還是關，來決定 body 是否可以滾動
-    const isHidden = mobileMenu.classList.contains('hidden');
-    document.body.style.overflow = isHidden ? '' : 'hidden';
+    // 2. 判斷 body 是否可以滾動
+    const isNowHidden = mobileMenu.classList.contains('hidden');
+    document.body.style.overflow = isNowHidden ? '' : 'hidden';
+    
+    console.log("已切換狀態為:", isNowHidden ? "隱藏" : "顯示");
 }
 
 export function showPage(pageName) {
