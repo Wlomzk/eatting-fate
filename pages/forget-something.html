@@ -84,13 +84,27 @@
         #group-1 { top: 3%; left: -1%; width: 50%; height: 23%; }
         #egg-desc-1 { position: absolute; top: 5%; left: 107%; width: 116px; height: 60px; }
         #group-2 { top: 28%; left: 50%; width: 48%; height: 25%; }
-        #egg-desc-2 { position: absolute; top: 107%; left: 7%; width: 100px; height: 45px; }
+        #egg-desc-2 { position: absolute; top: 107%; left: 5%; width: 120px; height: 75px; }
         #group-3 { top: 28%; left: -5%; width: 50%; height: 20%; }
-        #egg-desc-3 { position: absolute; top: 109%; left: 13%; width: 60%; height: 67px; }
+        #egg-desc-3 { position: absolute; top: 109%; left: 10%; width: 70%; height: 75px; }
         .egg-box { width: 100%; height: 100%; background: #000; border-radius: 4px; overflow: hidden; }
         .egg-box img { width: 100%; height: 100%; object-fit: cover; }
-        .egg-desc { position: absolute; padding: 8px; color: #f0eada; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); border: 1px solid rgba(222, 255, 154, 0.3); font-size: 0.85rem; border-radius: 4px; line-height: 1.4; }
-        .pagination-container { position: relative;; left: 50%; transform: translateX(-50%); width: 85%; display: flex; flex-direction: column; align-items: center; bottom: 12%; pointer-events: none; }
+        .egg-desc {
+    position: absolute;
+    padding: 8px;
+    color: #fff; /* 改為純白，對比度更好 */
+    background: transparent; /* 移除原本的背景色 */
+    backdrop-filter: none;    /* 移除背景模糊 */
+    border: none;            /* 移除邊框 */
+    border-radius: 0;        /* 移除圓角 */
+    font-size: 0.9rem;
+    line-height: 1.4;
+    
+    /* 關鍵：浮空效果與加深對比 */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
+    font-weight: 500; /* 可以稍微加粗字體，讓字看起來更有份量 */
+}
+        .pagination-container { position: relative;; left: 50%; transform: translateX(-50%); width: 85%; display: flex; flex-direction: column; align-items: center; bottom: 20%; pointer-events: none; }
         .controls-row { width: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: auto; }
         .nav-btn { width: 0; height: 0; border-top: 10px solid transparent; border-bottom: 10px solid transparent; cursor: pointer; }
         .btn-left { border-right: 25px solid #b46414; } .btn-right { border-left: 25px solid #b46414; }
@@ -116,7 +130,7 @@
              .newspaper-ui { width: 89% !important; height: 74% !important; left: 6% !important; top: 18% !important; }
              #group-1 { top: 1% !important; left: -1% !important; width: 52% !important; height: 24% !important; }
              #egg-desc-1 { top: 5% !important; left: 105% !important; width: 150px !important; height: 110px !important; }
-             #group-2 { top: 32% !important; left: 51% !important; width: 45% !important; height: 30% !important; }
+             #group-2 { top: 32% !important; left: 51% !important; width: 45% !important; height: 26% !important; }
              #egg-desc-2 { top: 107% !important; left: 4% !important; width: 82% !important; height: 43% !important; }
              #group-3 { top: 33% !important; left: -3% !important; width: 48% !important; height: 20% !important; }
              #egg-desc-3 { top: 110% !important; left: 1% !important; width: 80% !important; height: 80% !important; }
