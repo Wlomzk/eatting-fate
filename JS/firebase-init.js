@@ -21,7 +21,7 @@ export const db = getFirestore(app);
 const style = "background: #000; color: #0f0; font-family: monospace; padding: 5px; font-size: 14px;";
 
 // 執行匿名登入
-signInAnonymously(auth)
+/* signInAnonymously(auth)
   .then((userCredential) => {
     // 成功登入後，user 資料藏在 userCredential 裡面
     const user = userCredential.user;
@@ -35,3 +35,4 @@ signInAnonymously(auth)
     // console.error 不支援 %c CSS 樣式，所以這裡用純文字
     console.error("[系統錯誤] 登入失敗：您已遺失在輪迴的洪流中...", err);
   });
+*/
