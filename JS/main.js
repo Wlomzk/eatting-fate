@@ -13,9 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const menuBtn = document.getElementById('mobile-menu-button');
     const closeBtn = document.getElementById('close-menu');
+    
+    // 關鍵修正：宣告 searchBtn 但不強求它一定要存在
+    const searchBtn = document.getElementById('search-btn');
 
     if (menuBtn) menuBtn.onclick = toggleMenu;
     if (closeBtn) closeBtn.onclick = toggleMenu;
 
+    // 嚴格的安全判斷：只有找到按鈕時，才綁定事件，這就是模組化需要的穩定性
+    if (searchBtn) {
+        searchBtn.onclick = handleTrack;
+    }
+
     window.addEventListener('resize', updateHeroBanner);
 });
+
+// /* 預留 */ 區塊已保留，邏輯執行順序已修正

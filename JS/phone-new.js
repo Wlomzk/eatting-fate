@@ -120,3 +120,6 @@ function openApp(title, content) {
 function closeApp() { 
     document.getElementById('gx-modal').style.display = 'none'; 
 }
+
+// 在檔案的最下方加入這行
+document.getElementById('mobile-menu-button').addEventListener('click', toggleMenu);
