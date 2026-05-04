@@ -9,14 +9,13 @@ export function updateHeroBanner() {
 export function toggleMenu() {
     const mobileMenu = document.getElementById('mobile-menu');
     if (!mobileMenu) return;
-    const isHidden = window.getComputedStyle(mobileMenu).display === 'none';
-    if (isHidden) {
-        mobileMenu.style.setProperty('display', 'flex', 'important');
-        document.body.style.overflow = 'hidden';
-    } else {
-        mobileMenu.style.setProperty('display', 'none', 'important');
-        document.body.style.overflow = '';
-    }
+
+    // 1. 直接切換 class (Tailwind 的 hidden 會自動處理 display: none)
+    mobileMenu.classList.toggle('hidden');
+
+    // 2. 判斷現在是開還是關，來決定 body 是否可以滾動
+    const isHidden = mobileMenu.classList.contains('hidden');
+    document.body.style.overflow = isHidden ? '' : 'hidden';
 }
 
 export function showPage(pageName) {
