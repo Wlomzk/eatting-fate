@@ -1,11 +1,11 @@
-// js/firebase-init.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.x.x/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.x.x/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.x.x/firebase-firestore.js";
+// 請將原本的 10.x.x 全部替換為正確的 10.12.2
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // 請換成新產生的 Key
 const firebaseConfig = {
-  apiKey: "新產生的_API_KEY",
+  apiKey: "AIzaSyCvEngtZ2RHi5UmvSNuldzprx4FgwNqSUI",
   authDomain: "guixin-express.firebaseapp.com",
   projectId: "guixin-express",
   storageBucket: "guixin-express.firebasestorage.app",
