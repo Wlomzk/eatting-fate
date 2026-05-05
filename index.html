@@ -11,9 +11,6 @@
     <link rel="stylesheet" href="CSS/phone-new.css">
     
     <style>
-        /* -------------------------------------------------------------------------- */
-        /* 過渡遮罩樣式 - 拉姆已修正：初始設為不透明，避免載入閃爍                          */
-        /* -------------------------------------------------------------------------- */
         #page-mask {
             position: fixed;
             top: 0;
@@ -29,11 +26,29 @@
     </style>
 </head>
 <body class="antialiased">
+
+    <div id="mobile-menu" class="hidden fixed inset-0 z-[9999] bg-[#3d3832] overflow-y-auto">
+        <div class="w-full flex justify-end p-8">
+            <button id="mobile-menu-close" class="text-white/70 hover:text-white">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-col items-center space-y-12 tracking-[0.6em] text-[#d9d4cc] mt-10">
+            <a href="javascript:void(0)" id="mobile-nav-home" class="text-3xl font-light">回 首 頁</a>
+            <a href="javascript:void(0)" id="mobile-nav-services" class="text-3xl font-light">服 務 項 目</a>
+            <a href="javascript:void(0)" id="mobile-nav-locations" class="text-3xl font-light">配 送 據 點</a>
+            <a href="pages/forget-something.html" class="text-3xl font-light">失物招領處</a>
+            <a href="login.html" class="mt-8 px-16 py-4 bg-[#d9d4cc] text-[#3d3832] rounded-sm text-xl font-bold">加 盟 登 入</a>
+        </div>
+    </div>
+
     <div id="page-mask"></div>
 
     <div class="status-bar">
         <div class="status-content animate-marquee">
-           ·········· [ 系統公告 ]：當前全球貨件同步率 86.3% ·········· [ 配送異常 ]：淡水轉運中心滯留中 ·········· [ 認領提醒 ]：請遺落物件之主盡快前往「失物招領處」 ·········· [ 系統公告 ]：萬物歸心，終有一宿 ··········
+            ·········· [ 系統公告 ]：當前全球貨件同步率 86.3% ·········· [ 配送異常 ]：淡水轉運中心滯留中 ·········· [ 認領提醒 ]：請遺落物件之主盡快前往「失物招領處」 ·········· [ 系統公告 ]：萬物歸心，終有一宿 ··········
         </div>
     </div>
 
@@ -61,23 +76,6 @@
                     <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
             </button>
-        </div>
-
-        <div id="mobile-menu" class="hidden fixed inset-0 z-[9999] bg-[#3d3832] overflow-y-auto">
-            <div class="w-full flex justify-end p-8">
-                <button id="mobile-menu-close" class="text-white/70 hover:text-white">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="flex flex-col items-center space-y-12 tracking-[0.6em] text-[#d9d4cc] mt-10">
-                <a href="javascript:void(0)" id="mobile-nav-home" class="text-3xl font-light">回 首 頁</a>
-                <a href="javascript:void(0)" id="mobile-nav-services" class="text-3xl font-light">服 務 項 目</a>
-                <a href="javascript:void(0)" id="mobile-nav-locations" class="text-3xl font-light">配 送 據 點</a>
-                <a href="pages/forget-something.html" class="text-3xl font-light">失物招領處</a>
-                <a href="login.html" class="mt-8 px-16 py-4 bg-[#d9d4cc] text-[#3d3832] rounded-sm text-xl font-bold">加 盟 登 入</a>
-            </div>
         </div>
     </nav>
 
@@ -132,7 +130,6 @@
 
     <script type="module" src="JS/main.js"></script>
     <script>
-        // 這裡維持原樣，不作更動，僅確保不干擾模組化執行
         function updateHeroBanner() {
             console.log("updateHeroBanner 已停用"); 
             return;

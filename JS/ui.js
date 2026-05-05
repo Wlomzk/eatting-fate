@@ -11,26 +11,22 @@ export function updateHeroBanner() {
 export function toggleMenu() {
     const mobileMenu = document.getElementById('mobile-menu');
     
-    // 除錯日誌 1：檢查函數是否被觸發
-    console.log("toggleMenu 函數已執行");
-
     if (!mobileMenu) {
-        console.error("錯誤：找不到 ID 為 'mobile-menu' 的元素！請檢查 HTML。");
+        console.error("找不到 #mobile-menu");
         return;
     }
 
-    // 除錯日誌 2：顯示當前狀態
-    const isCurrentlyHidden = mobileMenu.classList.contains('hidden');
-    console.log("當前選單狀態 (hidden class):", isCurrentlyHidden);
+    // 直接獲取當前 display 狀態
+    const currentDisplay = window.getComputedStyle(mobileMenu).display;
 
-    // 1. 切換 class
-    mobileMenu.classList.toggle('hidden');
-
-    // 2. 判斷 body 是否可以滾動
-    const isNowHidden = mobileMenu.classList.contains('hidden');
-    document.body.style.overflow = isNowHidden ? '' : 'hidden';
-    
-    console.log("已切換狀態為:", isNowHidden ? "隱藏" : "顯示");
+    // 如果目前是隱藏的，就設為 flex；否則設為 none
+    if (currentDisplay === 'none') {
+        mobileMenu.style.display = 'flex'; // 強制顯示
+        document.body.style.overflow = 'hidden'; // 禁止捲動
+    } else {
+        mobileMenu.style.display = 'none'; // 強制隱藏
+        document.body.style.overflow = ''; // 恢復捲動
+    }
 }
 
 export function showPage(pageName) {

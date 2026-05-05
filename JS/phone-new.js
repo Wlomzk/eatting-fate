@@ -107,10 +107,10 @@ if (window.hasInitializedPhone) {
 
 // --- [SECTION: 全域功能與控制 (APP 管理)] ---
 
-// 把變數宣告在外面，確保只查找一次
-const timeElement = document.getElementById('system-time');
-
 function updateClock() {
+    // 每次執行函數時，都重新在 DOM 裡找一次 #system-time，確保即使元素被重建也能正常更新
+    const timeElement = document.getElementById('system-time');
+
     if (timeElement) {
         timeElement.innerText = new Date().toLocaleTimeString('zh-TW', { 
             hour: '2-digit', 
