@@ -90,9 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const sessionData = await createPairingSession(user.uid);
                 // 如果有產生碼，顯示在 UI 上
                 const displayCode = document.getElementById('display-code');
-                if (displayCode && sessionData?.pairingCode) {
-                    displayCode.innerText = sessionData.pairingCode;
-                }
+                if (displayCode && sessionData && sessionData.pairingCode) {
+    // 把資料庫撈到的代碼，強制寫入 HTML 的顯示區
+    displayCode.innerText = sessionData.pairingCode; 
+    console.log("成功顯示配對碼：", sessionData.pairingCode);
+} else {
+    console.warn("配對碼為空，請檢查 sessionData 內容");
+}
             }
         } else {
             console.log("尚未登入，執行匿名登入...");

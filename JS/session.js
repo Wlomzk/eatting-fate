@@ -1,89 +1,90 @@
 // session.js
 import { db, auth } from './firebase-init.js';
 import { 
-    collection, query, where, getDocs, updateDoc, doc, 
+    collection, query, where, getDocs, updateDoc, doc, onSnapshot,
     addDoc, setDoc, serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /**
- * 產生配對碼 (PC 端使用)
- * @param {string} pcUid - 當前電腦的 UID
+ * 1. 產生配對碼 (手機端使用)
+ * @param {string} mobileUid - 當前手機的 UID
  */
-export async function createPairingSession(pcUid) {
+export async function createPairingSession(mobileUid) {
     try {
-        // 隨機產生 8 位數代碼
         const pairingCode = Math.floor(10000000 + Math.random() * 90000000).toString();
         
-        // 將 Session 寫入 Firestore
         const sessionRef = await addDoc(collection(db, "sessions"), {
             code: pairingCode,
-            pcUid: pcUid,
-            status: "waiting", // 等待手機連接
+            mobileUid: mobileUid,
+            status: "waiting", // 等待 PC 連接
             createdAt: serverTimestamp()
         });
         
-        console.log(`[系統通知] 配對碼生成成功: ${pairingCode} (Session ID: ${sessionRef.id})`);
+        console.log(`[系統] 配對碼生成成功: ${pairingCode}`);
         return { pairingCode, sessionId: sessionRef.id };
-        
     } catch (error) {
-        console.error("[系統錯誤] 無法生成配對碼：", error);
+        console.error("[系統錯誤] 生成配對碼失敗：", error);
     }
 }
 
 /**
- * 測試連接：寫入一筆「系統心跳」數據
- * 如果這段成功執行，代表我們的安全規則 (Rules) 設定正確！
+ * 2. 監聽配對狀態 (手機端使用)
+ * 讓手機在畫面顯示「配對中」，一旦 PC 連上，立刻變更狀態
+ */
+export function listenForPairing(sessionId, onPaired) {
+    const sessionDocRef = doc(db, "sessions", sessionId);
+    
+    // 即時監聽這個 Session 的狀態
+    return onSnapshot(sessionDocRef, (doc) => {
+        if (doc.exists() && doc.data().status === "paired") {
+            console.log("[系統] 電腦端已成功連線！");
+            onPaired(); // 觸發成功後的回呼函式
+        }
+    });
+}
+
+/**
+ * 3. 電腦端：輸入代碼進行配對
+ */
+export async function joinPairingSession(inputCode, pcUid) {
+    try {
+        const q = query(collection(db, "sessions"), where("code", "==", inputCode));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            console.error("查無此配對碼。");
+            return false;
+        }
+
+        const sessionDoc = querySnapshot.docs[0];
+        await updateDoc(doc(db, "sessions", sessionDoc.id), {
+            pcUid: pcUid,
+            status: "paired"
+        });
+
+        console.log("[系統] 配對成功！");
+        return true;
+    } catch (error) {
+        console.error("[系統錯誤] 連線失敗：", error);
+        return false;
+    }
+}
+
+/**
+ * 4. 心跳監測
  */
 export async function testConnection() {
-    // 等待 Auth 載入完成，取得 UID
     const user = auth.currentUser;
-    if (!user) {
-        console.warn("系統尚未準備好，請稍候...");
-        return;
-    }
+    if (!user) return;
 
     try {
         const userRef = doc(db, "users", user.uid);
         await setDoc(userRef, {
             lastSeen: new Date().toISOString(),
-            status: "online",
-            systemVersion: "1.0.0"
+            status: "online"
         }, { merge: true });
-
-        console.log("%c[系統通知] 終端機連線正常，已寫入伺服器。", "color: #0f0;");
+        console.log("%c[系統] 連線正常", "color: #0f0;");
     } catch (error) {
-        console.error("[系統錯誤] 無法寫入資料庫：", error.message);
-    }
-}
-
-/**
- * 手機端：根據代碼加入連線
- */
-export async function joinPairingSession(inputCode, mobileUid) {
-    try {
-        // 1. 去資料庫搜尋這組 code
-        const q = query(collection(db, "sessions"), where("code", "==", inputCode));
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) {
-            console.error("查無此配對碼，請確認後再輸入。");
-            return false;
-        }
-
-        // 2. 找到該筆資料 (理論上只有一筆)
-        const sessionDoc = querySnapshot.docs[0];
-        
-        // 3. 更新該資料：寫入手機 UID 並把狀態改成 paired
-        await updateDoc(doc(db, "sessions", sessionDoc.id), {
-            mobileUid: mobileUid,
-            status: "paired"
-        });
-
-        console.log("%c[系統通知] 配對成功！與電腦端已同步。", "color: #00ff00; font-weight: bold;");
-        return true;
-
-    } catch (error) {
-        console.error("[系統錯誤] 連線失敗：", error);
-        return false;
+        console.error("[系統錯誤] 連線失敗：", error.message);
     }
 }
