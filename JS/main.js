@@ -7,6 +7,8 @@ import { testConnection, getOrGeneratePairingSession, joinPairingSession } from 
 import { onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { auth } from './firebase-init.js';
 
+const isDev = true; // 上線時改為 false
+
 // 1. 裝置角色判斷 (核心翻轉：手機現在是 terminal，電腦是 controller)
 function getDeviceRole() {
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
