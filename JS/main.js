@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const terminal = document.getElementById('terminal-ui'); // 這是顯示碼
     const controller = document.getElementById('controller-ui'); // 這是輸入框
+
+    // 1. 強制重置：先把兩邊都藏起來
+    terminal?.classList.add('hidden');
+    controller?.classList.add('hidden');
     
     if (isMobile) {
         // 手機 -> 顯示配對碼 (Terminal UI)
