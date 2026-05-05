@@ -2,7 +2,8 @@
 import './firebase-init.js';
 import { toggleMenu, showPage, updateHeroBanner } from './ui.js';
 import { handleTrack, renderArchive } from './archive.js';
-import { testConnection, createPairingSession, joinPairingSession } from './session.js';
+// 這裡改成了 getOrGeneratePairingSession
+import { testConnection, getOrGeneratePairingSession, joinPairingSession } from './session.js';
 import { onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { auth } from './firebase-init.js';
 
