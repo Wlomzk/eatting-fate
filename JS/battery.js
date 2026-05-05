@@ -136,13 +136,11 @@ function drainBattery(amount) {
 // --- 背景耗電循環 ---
 setInterval(() => {
     if (chargingInterval !== null) {
-        console.log("狀態：充電中 (耗電已暫停)");
         return; 
     }
 
     if (batteryLevel > 0) {
-        drainBattery(1);
-        console.log("狀態：背景耗電中... 目前電量:", batteryLevel + "%");
+        drainBattery(1); // 每 5 秒消耗 1%，這裡可以根據需要調整
     }
 }, 5000);
 
@@ -150,7 +148,6 @@ setInterval(() => {
 document.addEventListener('battery-consume', (e) => {
     const amount = e.detail.amount || 1; // 預設消耗 1%，除非 APP 指定
     drainBattery(amount);
-    console.log(`[電池系統] 收到消耗指令，扣除: ${amount}%`);
 });
 
 // --- 修正：確保網頁一載入，UI 就會立刻更新為記憶中的數值 ---
