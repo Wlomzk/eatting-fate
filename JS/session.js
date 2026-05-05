@@ -39,6 +39,26 @@ export async function createPairingSession(mobileUid) {
 }
 
 /**
+ * 聰明的配對碼獲取：有舊的就回傳舊的，沒有才創新的
+ */
+export async function getOrGeneratePairingSession(mobileUid) {
+    // 1. 先找找看有沒有已經存在的 Session
+    const q = query(collection(db, "sessions"), where("mobileUid", "==", mobileUid), where("status", "==", "waiting"));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+        // 找到了！回傳現有的代碼
+        const doc = querySnapshot.docs[0];
+        console.log("[系統] 偵測到現有配對碼，直接沿用:", doc.data().code);
+        return { pairingCode: doc.data().code, sessionId: doc.id };
+    }
+
+    // 2. 沒找到，才執行「產生新碼」的動作
+    console.log("[系統] 沒有現有配對碼，產生新的...");
+    return await createPairingSession(mobileUid);
+}
+
+/**
  * 2. 監聽配對狀態 (手機端使用)
  */
 export function listenForPairing(sessionId, onPaired) {

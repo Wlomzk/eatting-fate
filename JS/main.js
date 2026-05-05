@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 如果是手機(Terminal)，自動產生配對碼並顯示
             if (currentRole === 'terminal') {
-                const sessionData = await createPairingSession(user.uid);
+                const sessionData = await getOrGeneratePairingSession(user.uid);
                 const displayCode = document.getElementById('display-code');
                 
                 if (displayCode && sessionData && sessionData.pairingCode) {
