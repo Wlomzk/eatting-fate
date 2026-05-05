@@ -44,6 +44,55 @@
     background-position: center;
 }
 
+/* --- 登入遮罩 (新增樣式) --- */
+.gx-login-overlay {
+    position: absolute;
+    top: 22px; left: 43px; width: 80%; height: 74%;
+    clip-path: polygon(
+    25px 0,                 /* 頂部切角開始 */
+    calc(100% - 25px) 0,    /* 頂部切角結束 */
+    100% 25px,              /* 右側切角開始 */
+    100% calc(100% - 25px), /* 右側切角結束 */
+    calc(100% - 25px) 100%, /* 底部切角開始 */
+    25px 100%,              /* 底部切角結束 */
+    0 calc(100% - 25px),    /* 左側切角開始 */
+    0 25px                  /* 左側切角結束 */
+);
+    background: rgba(0, 0, 0, 0.98);
+    z-index: 240;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #32CD32;
+    font-family: monospace;
+}
+
+.login-box { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    width: 70%; 
+}
+
+.login-box input {
+    background: #000;
+    border: 1px solid #32CD32;
+    color: #32CD32;
+    padding: 10px;
+    font-family: monospace;
+}
+
+.login-box button {
+    background: #32CD32;
+    color: #000;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+}
+
 /* --- 2. APP 互動層 (核心排版) --- */
 .gx-app-layer {
     position: absolute;
@@ -55,7 +104,7 @@
     /* 這裡替換成新的切角邏輯 */
     /* 參數解釋：切角大小設定為 20px，您可以根據手機圖片實際的斜角大小微調這個數字 */
     clip-path: polygon(
-        0 0,                        /* 左上角 (不動) */
+        0 0,                          /* 左上角 (不動) */
         100% 0,                     /* 右上角 (不動) */
         100% calc(100% - 25px),     /* 右側邊緣往下直到切角起點 */
         calc(100% - 25px) 100%,     /* 右下角切角點 */
@@ -187,8 +236,8 @@
     top: 56px; left: 39px; width: 81%; height: 69%;
     background: rgba(0, 0, 0, 0.8);
     clip-path: polygon(
-        0 0,                        /* 左上角 (不動) */
-        100% 0,                     /* 右上角 (不動) */
+        0 0,                                /* 左上角 (不動) */
+        100% 0,                             /* 右上角 (不動) */
         100% calc(100% - 25px),     /* 右側邊緣往下直到切角起點 */
         calc(100% - 25px) 100%,     /* 右下角切角點 */
         25px 100%,                  /* 左下角切角點 */
@@ -263,7 +312,7 @@
     top: 0; left: 0;
     width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.9); /* 深色背景 */
-    z-index: 200;                  /* 確保蓋住所有 APP */
+    z-index: 200;                 /* 確保蓋住所有 APP */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -304,13 +353,7 @@
     pointer-events: none; /* 讓點擊穿透，不會擋到其他操作 */
 }
 
-/* 預設隱藏的 APP */
-.gx-app-item.is-locked {
-    display: none; 
-}
-
-/* 如果想讓鎖定的 APP 呈現半透明或黑白，可以取消註解這段 */
-
+/* --- 隱藏 APP 邏輯 --- */
 .gx-app-item.is-locked {
     display: flex;
     filter: grayscale(1) brightness(0.5);

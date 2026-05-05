@@ -39,13 +39,13 @@ body {
     align-items: center;
     justify-content: flex-start; 
     overflow: hidden; 
-    letter-spacing: 0.1em;
+    letter-spacing: 0.01em;
     flex-shrink: 0;
 }
 
 .status-content { 
     line-height: 1;
-    font-size: 10px;
+    font-size: 13px;
     white-space: nowrap;
 }
 
@@ -105,7 +105,7 @@ nav { flex-shrink: 0; }
 .custom-pairing-box {
     margin-top: 50px;      /* 區塊距離上方多少 */
     margin-bottom: 50px;   /* 區塊距離下方多少 */
-    padding: 10px !important;         /* 內距，決定區塊看起來有多胖 */
+    padding: 10px;         /* 內距，決定區塊看起來有多胖 */
     width: 100%;            /* 寬度，手機通常用百分比 */
     max-width: 500px !important;      /* 限制最大寬度，電腦上才不會太寬 */
     margin-left: auto;

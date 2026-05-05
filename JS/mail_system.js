@@ -10,6 +10,19 @@ let currentUser = null;
 let currentMails = [];      
 let readMails = new Set(JSON.parse(localStorage.getItem('readMails') || '[]'));
 
+// 【直接啟動 App 的入口】
+export function launchMailApp(data) {
+    currentUser = data; 
+    currentMails = data.mails || []; 
+    
+    // 直接顯示列表，不需要登入頁
+    document.getElementById('mail-list-view').style.display = 'flex';
+    document.getElementById('mail-content-view').style.display = 'none';
+    
+    // 更新 UI
+    refreshMailUI();
+}
+
 export function initMailSystem(MAIL_DATABASE) {
     // 綁定鍵盤事件 (全域輔助)
     setupEventListeners();
@@ -54,6 +67,15 @@ function refreshMailUI() {
     const mailContentView = document.getElementById('mail-content-view');
     const winTitle = document.getElementById('mail-win-title');
     const nameDisplay = document.getElementById('user-display-name');
+    if (currentUser) {
+        const displayName = currentUser.name || "員工";
+        winTitle.innerText = `系統郵件 - ${displayName}`;
+        if(nameDisplay) nameDisplay.innerText = displayName;
+        
+        renderMailList();
+        updateLEDStatus(); 
+    }
+}
 
     // --- 【除錯用】檢查看看變數與元素 ---
     console.log("當前使用者:", currentUser); 
@@ -80,7 +102,7 @@ function refreshMailUI() {
         winTitle.innerText = `系統郵件 - 鎖定中`;
         updateLEDStatus();
     }
-}
+
 
 /** 渲染郵件列表 */
 function renderMailList() {
