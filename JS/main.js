@@ -61,15 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const code = document.getElementById('pairing-input').value;
         const statusText = document.getElementById('pairing-status');
         
-        if (code.length !== 11) {
-            statusText.innerText = "代碼錯誤，請輸入 11 位數";
+        // --- 修改處：放寬長度判定，改為判斷是否為空，並修正提示語 ---
+        if (!code || code.length < 8) {
+            statusText.innerText = "編號格式有誤，請確認載體標籤。";
             return;
         }
 
-        statusText.innerText = "配對中...";
+        statusText.innerText = "正在定錨命運...";
         if (auth.currentUser) {
             const success = await joinPairingSession(code, auth.currentUser.uid);
-            statusText.innerText = success ? "配對成功！系統已同步。" : "配對失敗，請確認代碼。";
+            statusText.innerText = success ? "配對成功！系統已同步。嘻嘻。" : "配對失敗，該編號尚未定錨。";
         }
     });
 
