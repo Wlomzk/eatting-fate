@@ -47,15 +47,6 @@
 }
 
 .gx-power-off-overlay {
-    display:none; 
-    position:absolute; 
-    top:0; left:0; width:100%; height:100%; 
-    background:#000; 
-    flex-direction:column; 
-    justify-content:center; 
-    align-items:center; 
-    color:#d41c16; 
-    text-align:center;
     z-index: 240;
     clip-path: polygon(
     25px 0,               /* 頂部切角開始 */
@@ -67,6 +58,15 @@
     0 calc(100% - 25px),    /* 左側切角開始 */
     0 25px                  /* 左側切角結束 */
     );
+    display:none; 
+    position:absolute; 
+    top:0; left:0; width:100%; height:100%; 
+    background:#000; 
+    flex-direction:column; 
+    justify-content:center; 
+    align-items:center; 
+    color:#d41c16; 
+    text-align:center;
     }
 
 /* --- 登入遮罩 (已修正排版) --- */
