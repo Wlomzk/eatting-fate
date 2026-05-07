@@ -199,24 +199,6 @@ function renderAppGrid() {
     grid.appendChild(div);
 });
 
-
-        div.onclick = () => {
-            // --- 拉姆新增：點擊 APP 耗電 10% 測試功能 ---
-            document.dispatchEvent(new CustomEvent('battery-consume', { 
-                detail: { amount: 10 } 
-            }));
-
-            if (app.action) {
-                app.action();
-            } else {
-                openApp(app.title, app.content);
-            }
-        };
-
-        grid.appendChild(div);
-    });
-}
-
 // --- 功能執行函式 ---
 function handleOpenEvidence(filterType = 'all') {
     const modal = document.getElementById('gx-modal');
