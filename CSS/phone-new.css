@@ -215,6 +215,63 @@
     margin-top: 4px;
 }
 
+/* --- 導航 System (下半部雙切角) --- */
+.gx-nav-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    /* 上方平整, 下方左右 25px 切角 */
+    clip-path: polygon(
+        0 0, 
+        100% 0, 
+        100% calc(100% - 25px), 
+        calc(100% - 25px) 100%, 
+        25px 100%, 
+        0 calc(100% - 25px)
+    );
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.gx-nav-search-bar {
+    width: 90%;
+    margin: 15px auto;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #32CD32;
+    color: #32CD32;
+    padding: 5px;
+    outline: none;
+}
+
+.gx-nav-map-area {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    background: #111;
+    overflow: hidden;
+}
+
+.gx-nav-svg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.gx-nav-poi {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
 /* --- 3. 狀態列與破碎效果 --- */
 .gx-crack-overlay {
     position: absolute;
