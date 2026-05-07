@@ -13,6 +13,24 @@ window.chargingInterval = null;
 window.alert60Shown = false;
 window.alert30Shown = false;
 
+window.handleCharge = function() { // 拉姆將其掛載至 window 以供 HTML 按鈕呼叫
+    if (chargingInterval) return;
+    closeBatteryAlert();
+    showChargingIndicator();
+    localStorage.setItem('isCharging', 'true');
+    localStorage.setItem('chargeStartTime', Date.now());
+    chargingInterval = setInterval(() => {
+        if (batteryLevel < 100) {
+            batteryLevel++;
+            window.updateBatteryUI();
+        } else {
+            stopCharging();
+            alert60Shown = false; 
+            alert30Shown = false;
+        }
+    }, 1500);
+};
+
 // --- 【關鍵修正】暴露給外部呼叫的更新函數 ---
 window.updateBatteryUI = function() {
     // 只有在登入狀態下才更新 UI

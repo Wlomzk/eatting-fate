@@ -67,12 +67,14 @@ function updateAppStage(appId, newStage) {
             </div>   
             <div class="gx-phone-close" id="gx-close" style="z-index: 100;">×</div>
             <div class="gx-app-layer"><div class="gx-app-grid"></div></div>
-            <div id="gx-power-off-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#000; flex-direction:column; justify-content:center; align-items:center; color:#d41c16; text-align:center;">
+            <div class="gx-power-off-overlay">
                 <div style="font-size: 50px; margin-bottom: 20px;">🪫</div>
-                <div style="font-size: 18px; font-weight:bold; margin-bottom:10px;">系統電力已耗盡</div>
-                <div style="font-size: 14px; color:#666; margin-bottom:20px;">請立即接入能源載體...</div>
-                <button onclick="handleCharge()" style="background:#32CD32; color: #000; border:none; padding:10px 20px; cursor:pointer; font-weight:bold; border-radius:5px;">[ 啟動緊急充電 ]</button>
-            </div>
+  <div style="font-size: 18px; font-weight:bold; margin-bottom:10px;">系統電力已耗盡</div>
+  <div style="font-size: 14px; color:#666; margin-bottom:20px;">請立即接入能源載體...</div>
+  
+  <!-- 修正點：確保 handleCharge 能順利觸發全域的電力更新 -->
+  <button onclick="window.handleCharge ? window.handleCharge() : handleCharge()" style="background:#32CD32; color: #000; border:none; padding:10px 20px; cursor:pointer; font-weight:bold; border-radius:5px;">[ 啟動緊急充電 ]</button>
+</div>
             <div class="gx-crack-overlay"></div>
             <div class="gx-glitch-overlay"></div>
             <div id="gx-battery-notifier"></div>
