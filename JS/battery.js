@@ -20,6 +20,7 @@ window.updateBatteryUI = function() {
 
     const fill = document.getElementById('battery-fill');
     const text = document.getElementById('battery-text');
+    const powerOverlay = document.getElementById('gx-power-off-overlay'); // 拉姆新增：抓取鎖定圖層
     
     // 同步儲存
     localStorage.setItem('gx_battery', batteryLevel);
@@ -35,6 +36,15 @@ window.updateBatteryUI = function() {
     
     if (text) {
         text.innerText = batteryLevel + '%';
+    }
+
+    /* --- 拉姆新增：電力歸零鎖定邏輯 --- */
+    if (powerOverlay) {
+        if (batteryLevel <= 0) {
+            powerOverlay.style.display = 'flex';
+        } else {
+            powerOverlay.style.display = 'none';
+        }
     }
 
     // 更新彈窗內的數字顯示
