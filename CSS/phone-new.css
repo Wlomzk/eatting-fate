@@ -219,7 +219,7 @@
 .gx-nav-container {
     position: relative;
     width: 100%;
-    height: 305px;
+    height: 305px; /* 保留您的原始高度 */
     background: #000;
     display: flex;
     flex-direction: column;
@@ -255,19 +255,48 @@
     z-index: 5;
 }
 
+/* 修正後的 POI：讓文字與圖標垂直排列 */
 .gx-nav-poi {
     position: absolute;
-    width: 16px;
-    height: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     transform: translate(-50%, -50%);
     z-index: 10;
+    cursor: pointer;
+}
+
+/* 地點文字：顯示在圖標上方，寬度縮小 */
+.gx-nav-poi div {
+    font-size: 9px;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+    white-space: nowrap;
+    text-align: center;
+    width: 45px; /* 橫向小一點 */
+    margin-bottom: 2px; /* 位於圖標上方時的間距 */
 }
 
 #nav-line {
-    transition: all 0.8s ease-out; /* 這是關鍵，讓線段平滑延伸 */
-    filter: drop-shadow(0 0 5px #32CD32); /* 讓線條發光 */
+    transition: all 0.8s ease-out;
+    stroke: #32CD32; /* 確保顏色清楚 */
+    /* 已移除 filter: drop-shadow，防止玩家眼睛受傷 */
 }
 
+/* 確保按鈕是原始小顆樣式 */
+#nav-go-btn {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #32CD32;
+    color: #000;
+    border: none;
+    padding: 2px 2px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 100;
+}
 /* --- 3. 狀態列與破碎效果 --- */
 .gx-crack-overlay {
     position: absolute;

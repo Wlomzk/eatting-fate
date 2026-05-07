@@ -31,7 +31,7 @@ let currentTarget = null;
 
 window.addEventListener('stateUpdated', (e) => {
     const newState = e.detail;
-    if (currentActiveApp === 'archive') { 
+    if (typeof currentActiveApp !== 'undefined' && currentActiveApp === 'archive') { 
         renderArchiveList(newState.unlockedEvidences);
     }
 });
@@ -198,7 +198,7 @@ function renderAppGrid() {
     });
 }
 
-// --- 導航功能 ---
+// --- 導航功能 (UI 修正版) ---
 function handleOpenNav() {
     const modal = document.getElementById('gx-modal');
     document.getElementById('modal-title').innerText = '尋蹤導航';
@@ -209,25 +209,22 @@ function handleOpenNav() {
                    onkeydown="if(event.keyCode===13) window.handleNavSearch(this.value)">
             <div class="gx-nav-map-area">
                 <img src="image/phone/TAMSUI-MAP.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6;">
-                <svg class="gx-nav-svg-layer" style="overflow:visible;">
-                    <line id="nav-line" x1="50%" y1="90%" x2="50%" y2="90%" 
-                          stroke="#32CD32" stroke-width="2" stroke-dasharray="5,5" 
-                          style="display:none; transition: all 0.8s ease-out;" />
+                <svg class="gx-nav-svg-layer">
+                    <line id="nav-line" x1="50%" y1="90%" x2="50%" y2="90%" style="display:none;" />
                 </svg>
-                <div class="fx-breathing" style="position:absolute; bottom:10%; left:50%; width:10px; height:10px; background:#d41c16; border-radius:50%; transform:translate(-50%, 50%); z-index:11;"></div>
+                <div style="position:absolute; bottom:10%; left:50%; width:10px; height:10px; background:#d41c16; border-radius:50%; transform:translate(-50%, 50%); z-index:11;"></div>
                 <div id="nav-poi-container">
                     ${NAV_LOCATIONS.map(loc => `
                         <div class="gx-nav-poi" id="poi-${loc.id}" 
-                             style="left:${loc.x}%; top:${loc.y}%; display:none; transform:translate(-50%, -50%); cursor:pointer;" 
+                             style="left:${loc.x}%; top:${loc.y}%; display:none;" 
                              onclick="window.startNavConnection('${loc.id}')">
-                            <div style="font-size:10px; color:#fff; text-shadow:1px 1px 2px #000; width:50px; text-align:center;">${loc.name}</div>
+                            <div>${loc.name}</div>
                             <span style="font-size:16px;">${loc.icon}</span>
                         </div>
                     `).join('')}
                 </div>
             </div>
-            <button id="nav-go-btn" onclick="window.executeNavigation()" 
-                    style="display:none; position:absolute; bottom:-4px; left:50%; transform:translateX(-50%); background:#32CD32; color:#000; border:none; padding:2px 2px; font-weight:bold; cursor:pointer; z-index:100;">
+            <button id="nav-go-btn" onclick="window.executeNavigation()" style="display:none;">
                     [ 執行前往 ]
             </button>
         </div>
@@ -251,7 +248,7 @@ function handleNavSearch(val) {
 
     if (found) {
         const poiEl = document.getElementById(`poi-${found.id}`);
-        poiEl.style.display = 'block';
+        poiEl.style.display = 'flex'; // 使用 flex 以匹配 CSS 的垂直排列
     }
 }
 
