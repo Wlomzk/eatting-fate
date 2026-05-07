@@ -1,4 +1,4 @@
-/* --- 1. 動畫定義 --- */
+/* --- 1. 動畫特效定義 --- */
 @keyframes scroll {
     from { transform: translateX(100%); }
     to { transform: translateX(-100%); }
@@ -7,6 +7,33 @@
 @keyframes number-pop {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.2); color: #8b0000; }
+}
+
+/* 殘命感/不穩定閃爍 */
+@keyframes fx-glitch-flicker {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    33% { opacity: 0.8; filter: brightness(1.2); }
+    35% { opacity: 0.3; filter: brightness(0.5); }
+    37% { opacity: 1; filter: brightness(1.5); }
+    80% { opacity: 0.9; }
+    82% { opacity: 0.2; }
+}
+
+/* 脈動感 (適合導航線或感應器) */
+@keyframes fx-pulse-aura {
+    0% { box-shadow: 0 0 5px currentColor; }
+    50% { box-shadow: 0 0 20px currentColor; }
+    100% { box-shadow: 0 0 5px currentColor; }
+}
+
+/* 只要標籤加上這類名，就會開始閃 */
+.fx-unstable {
+    animation: fx-glitch-flicker 3s infinite !important;
+}
+
+/* 只要加上這個，就會有呼吸發光感 */
+.fx-breathing {
+    animation: fx-pulse-aura 2s infinite;
 }
 
 .animate-marquee { 

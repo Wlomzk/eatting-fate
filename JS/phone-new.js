@@ -70,7 +70,7 @@ function updateAppStage(appId, newStage) {
             <div id="gx-power-off-overlay" class="gx-power-off-overlay">
         <div style="font-size: 50px; margin-bottom: 20px;">🪫</div>
         <div style="font-size: 18px; font-weight:bold; margin-bottom:10px;">系統電力已耗盡</div>
-        <button onclick="window.handleCharge()" style="z-index: 241; background:#32CD32; ...">
+        <button onclick="window.handleCharge()" class="fx-unstable" style="z-index: 241; background:#32CD32; ...">
             [ 啟動緊急充電 ]
         </button>
     </div>
