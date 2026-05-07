@@ -81,7 +81,7 @@ setInterval(() => {
     if (!localStorage.getItem('gx_user')) return; 
     if (chargingInterval !== null) return;
     if (batteryLevel > 0) drainBattery(1);
-}, 5000);
+}, 5000); // 每 5 秒扣 1% 電
 
 // --- 輔助函數 ---
 
