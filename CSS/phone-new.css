@@ -474,6 +474,7 @@
     .gx-app-layer { top: 43px; left: 58px; right: 32px; bottom: 132px; }
     .gx-app-grid { gap: 16px; padding: 19px 13px; }
     .gx-modal { top: 43px; left: 56px; width: 75%; height: 73%;}
+    .gx-battery-notifier { height: 73%;}
 }
 
 /* --- 故障效果核心邏輯 --- */

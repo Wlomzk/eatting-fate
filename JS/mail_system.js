@@ -107,7 +107,7 @@ function renderMailList() {
         
         div.className = `mail-item ${isRead ? 'read' : 'unread'}`;
         div.style.cursor = 'pointer';
-        div.style.padding = '10px';
+        div.style.padding = '2px';
         div.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
         div.style.display = 'flex';
         div.style.flexDirection = 'column';

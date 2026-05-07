@@ -205,7 +205,7 @@ function handleOpenNav() {
         <div class="gx-nav-container">
             <input type="text" class="gx-nav-search-bar" placeholder="搜尋據點..." oninput="window.handleNavSearch(this.value)">
             <div class="gx-nav-map-area">
-                <img src="image/phone/map_blur.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6;">
+                <img src="image/phone/TAMSUI-MAP.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6;">
                 <svg class="gx-nav-svg-layer"><line id="nav-line" x1="50%" y1="90%" x2="50%" y2="90%" stroke="#32CD32" stroke-width="2" stroke-dasharray="5,5" style="display:none;" /></svg>
                 <div class="fx-breathing" style="position:absolute; bottom:10%; left:50%; width:10px; height:10px; background:#d41c16; border-radius:50%; transform:translate(-50%, 50%); z-index:11;"></div>
                 <div id="nav-poi-container">
