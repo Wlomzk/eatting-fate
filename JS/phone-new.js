@@ -203,7 +203,10 @@ function handleOpenNav() {
     document.getElementById('modal-title').innerText = '尋蹤導航';
     document.getElementById('modal-text').innerHTML = `
         <div class="gx-nav-container">
-            <input type="text" class="gx-nav-search-bar" placeholder="搜尋據點..." oninput="window.handleNavSearch(this.value)">
+            // --- 搜尋框改為監聽鍵盤事件 ---
+<input type="text" id="nav-search" class="gx-nav-search-bar" 
+       placeholder="輸入地點並按下 ENTER..." 
+       onkeydown="if(event.keyCode===13) window.handleNavSearch(this.value)">
             <div class="gx-nav-map-area">
                 <img src="image/phone/TAMSUI-MAP.webp" style="width:100%; height:100%; object-fit:cover; opacity:0.6;">
                 <svg class="gx-nav-svg-layer"><line id="nav-line" x1="50%" y1="90%" x2="50%" y2="90%" stroke="#32CD32" stroke-width="2" stroke-dasharray="5,5" style="display:none;" /></svg>
@@ -221,18 +224,54 @@ function handleOpenNav() {
 function handleNavSearch(val) {
     const line = document.getElementById('nav-line');
     const goBtn = document.getElementById('nav-go-btn');
-    document.querySelectorAll('.gx-nav-poi').forEach(p => p.style.display = 'none');
+    const poiContainer = document.querySelectorAll('.gx-nav-poi');
+    
+    // 1. 初始化：通通藏起來
+    poiContainer.forEach(p => {
+        p.style.display = 'none';
+        p.classList.remove('fx-unstable');
+    });
     line.style.display = 'none';
     goBtn.style.display = 'none';
+    currentTarget = null;
+
     if (!val) return;
-    const found = NAV_LOCATIONS.find(loc => loc.name.includes(val));
+
+    // 2. 比對地點
+    const found = NAV_LOCATIONS.find(loc => loc.name.includes(val) || val.includes(loc.name));
+
     if (found) {
         currentTarget = found;
-        document.getElementById(`poi-${found.id}`).style.display = 'block';
-        line.setAttribute('x2', `${found.x}%`);
-        line.setAttribute('y2', `${found.y}%`);
+        const poiEl = document.getElementById(`poi-${found.id}`);
+
+        // 3. 顯示圖標並加上跳動感
+        poiEl.style.display = 'block';
+        poiEl.classList.add('fx-unstable'); 
+
+        // 4. SVG 連線動畫邏輯
+        // 先設定起點 (玩家) 與 終點 (目的地)
+        line.setAttribute('x1', '50%');
+        line.setAttribute('y1', '90%');
+        line.setAttribute('x2', '50%'); // 初始終點設在起點
+        line.setAttribute('y2', '90%');
         line.style.display = 'block';
-        goBtn.style.display = 'block';
+
+        // 強制瀏覽器重繪動畫
+        setTimeout(() => {
+            line.style.transition = "all 0.8s ease-out"; // 讓線條用噴的出來
+            line.setAttribute('x2', `${found.x}%`);
+            line.setAttribute('y2', `${found.y}%`);
+        }, 50);
+
+        // 5. 等線跑完後，再跳出前往按鈕 (延遲 800ms)
+        setTimeout(() => {
+            goBtn.style.display = 'block';
+            goBtn.classList.add('fx-breathing'); // 讓按鈕也有呼吸感
+        }, 850);
+
+    } else {
+        console.log("導航系統：無法辨識的座標。");
+        // 這裡可以加個震動音效或紅字提示
     }
 }
 

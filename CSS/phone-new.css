@@ -263,6 +263,11 @@
     z-index: 10;
 }
 
+#nav-line {
+    transition: all 0.8s ease-out; /* 這是關鍵，讓線段平滑延伸 */
+    filter: drop-shadow(0 0 5px #32CD32); /* 讓線條發光 */
+}
+
 /* --- 3. 狀態列與破碎效果 --- */
 .gx-crack-overlay {
     position: absolute;
