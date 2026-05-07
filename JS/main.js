@@ -58,11 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // F. 配對同步功能 (電腦端 Controller 使用)
     document.getElementById('btn-pair')?.addEventListener('click', async () => {
-        const code = document.getElementById('pairing-input').value;
+        const code = document.getElementById('pairing-input').value.trim();
         const statusText = document.getElementById('pairing-status');
         
         // --- 修改處：放寬長度判定，改為判斷是否為空，並修正提示語 ---
-        if (!code || code.length < 8) {
+        if (!code || code.length < 10) {
             statusText.innerText = "編號格式有誤，請確認載體標籤。";
             return;
         }
